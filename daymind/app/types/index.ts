@@ -9,8 +9,8 @@ export type Todo = {
   rolledOver: boolean
   memoId?: string
   timerSeconds?: number
-  startTime?: string      // 추가 "09:00"
-  endTime?: string        // 추가 "10:00"
+  startTime?: string     
+  endTime?: string        
   createdAt: string
 }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTodoStore } from '../store/todoStore'
-
+import TodoList from '../components/todo/TodoList'
 import TodoModal from '../components/todo/TodoModal'
 import RolloverBanner from '../components/today/RolloverBanner'
 import type { Todo } from '../types'
@@ -92,11 +92,14 @@ export default function Today() {
       {/* 메인 */}
       <main className="px-4 mt-5 space-y-4 max-w-2xl mx-auto">
 
-        {/* 이월 배너 */}
-        <RolloverBanner todos={todos} />
+    {/* 이월 배너 */}
+    <RolloverBanner todos={todos} />
 
-        {/* 탭 콘텐츠 */}
-        {activeTab === '주간' && <WeeklyView />}
+    {/* 탭 콘텐츠 */}
+    {activeTab === '일일' && (
+    <TodoList todos={todayTodos} onEdit={handleEdit} />
+    )}
+    {activeTab === '주간' && <WeeklyView />}
 
       </main>
 

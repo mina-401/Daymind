@@ -3,6 +3,9 @@ import { useTodoStore } from '../../store/todoStore'
 import TodoItem from '../todo/TodoItem'
 import TodoModal from '../todo/TodoModal'
 import type { Todo } from '../../types'
+import EnergyTag from '../ui/EnergyTag'
+
+const HOURS = Array.from({ length: 24 }, (_, i) => i)
 
 const DAYS = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -47,6 +50,8 @@ export default function MonthlyView() {
 
   const calendarDates = getCalendarDates(currentYear, currentMonth)
   const selectedTodos = todos.filter((t) => t.date === selectedDate)
+  const timedTodos = selectedTodos.filter((t) => t.startTime)
+const untimedTodos = selectedTodos.filter((t) => !t.startTime)
 
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
@@ -162,35 +167,92 @@ export default function MonthlyView() {
         </div>
       </div>
 
-      {/* 선택한 날 할일 목록 */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-3">
-          <span className="font-bold text-[15px] text-[#4a443a]">
-            {selectedDateLabel} 할 일
-          </span>
-          <span className="text-[12px] text-[#a4a4c4] font-bold">
-            {selectedTodos.filter((t) => t.isCompleted).length} / {selectedTodos.length}
-          </span>
-        </div>
+     {/* 선택한 날 할일 목록 + 타임블록 */}
+<div className="mb-4">
+  <div className="flex items-center justify-between mb-3">
+    <span className="font-bold text-[15px] text-[#4a443a]">
+      {selectedDateLabel} 할 일
+    </span>
+    <span className="text-[12px] text-[#a4a4c4] font-bold">
+      {selectedTodos.filter((t) => t.isCompleted).length} / {selectedTodos.length}
+    </span>
+  </div>
 
-        {/* 할일 목록 */}
-        {selectedTodos.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-[#a4a4c4]">
-            <span className="material-symbols-outlined text-[40px] mb-2"
-              style={{ fontVariationSettings: "'FILL' 1" }}>
-              check_circle
-            </span>
-            <p className="font-bold text-[14px]">할 일이 없어요</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {selectedTodos.map((todo) => (
-              <TodoItem key={todo.id} todo={todo} onEdit={handleEdit} />
-            ))}
-          </div>
-        )}
+  {/* 시간 미정 */}
+  {untimedTodos.length > 0 && (
+    <div className="bg-white rounded-2xl p-4 border border-[#eee] mb-4">
+      <div className="flex items-center gap-1.5 mb-3">
+        <span className="material-symbols-outlined text-[16px] text-[#a4a4c4]">schedule</span>
+        <span className="text-[12px] font-bold text-[#a4a4c4] uppercase tracking-wider">시간 미정</span>
       </div>
+      <div className="space-y-2">
+        {untimedTodos.map((todo) => (
+          <TodoItem key={todo.id} todo={todo} onEdit={handleEdit} />
+        ))}
+      </div>
+    </div>
+  )}
 
+    {/* 타임블록 */}
+    <div className="bg-white rounded-2xl border border-[#eee] overflow-hidden">
+      {HOURS.map((hour) => {
+        const blockTodos = timedTodos.filter((t) =>
+          t.startTime?.startsWith(String(hour).padStart(2, '0'))
+        )
+        const hourStr = String(hour).padStart(2, '0') + ':00'
+
+        return (
+          <div key={hour} className="flex gap-3 px-4 min-h-[52px] border-b border-[#f5f5f5] last:border-b-0">
+            <div className="w-12 flex-shrink-0 flex items-start pt-3">
+              <span className="text-[11px] font-bold text-[#c4bfb4]">{hourStr}</span>
+            </div>
+            <div className="flex-grow py-2 flex flex-col gap-1.5">
+              {blockTodos.map((todo) => (
+                <div
+                  key={todo.id}
+                  onClick={() => handleEdit(todo)}
+                  className={`rounded-xl px-3 py-2 border cursor-pointer ${
+                    todo.isCompleted
+                      ? 'bg-[#f5f5f5] border-[#eee] opacity-60'
+                      : todo.energy === 'high'
+                      ? 'bg-red-50 border-red-200'
+                      : todo.energy === 'medium'
+                      ? 'bg-yellow-50 border-yellow-200'
+                      : 'bg-green-50 border-green-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[13px] font-bold ${
+                      todo.isCompleted ? 'line-through text-[#a4a4c4]' : 'text-[#4a443a]'
+                    }`}>
+                      {todo.title}
+                    </span>
+                    <EnergyTag energy={todo.energy} />
+                  </div>
+                  {todo.startTime && (
+                    <span className="text-[11px] text-[#a4a4c4] mt-0.5 block">
+                      {todo.startTime}{todo.endTime ? ` ~ ${todo.endTime}` : ''}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+
+  {/* 할일 없을 때 */}
+  {selectedTodos.length === 0 && (
+    <div className="flex flex-col items-center justify-center py-10 text-[#a4a4c4] mt-4">
+      <span className="material-symbols-outlined text-[40px] mb-2"
+        style={{ fontVariationSettings: "'FILL' 1" }}>
+        check_circle
+      </span>
+      <p className="font-bold text-[14px]">할 일이 없어요</p>
+    </div>
+  )}
+</div>
       {/* 추가 버튼 */}
       <button
         onClick={() => setIsModalOpen(true)}
