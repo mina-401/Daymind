@@ -12,12 +12,18 @@ export default function Layout() {
         }>
           {({ isActive }) => (
             <>
-              <div className={isActive ? "bg-[#eee8d5] text-[#8c7a2e] p-3 rounded-2xl mb-1 border border-[#dcd7c5] glossy-bubble" : "p-3"}>
-                <span className="material-symbols-outlined text-[24px]"
-                  style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
-                  today
-                </span>
-              </div>
+              <div
+              className={
+                isActive
+                  ? "bg-[#eee8d5] text-[#8c7a2e] p-3 rounded-2xl mb-1 border border-[#dcd7c5] glossy-bubble"
+                  : "p-3"
+              }>
+              <img
+                src="/icons/fi-rs-list-check.png"
+                alt="check"
+                className="w-6 h-6"
+              />
+            </div>
               <span className="font-bold text-[10px] uppercase tracking-wider">오늘</span>
             </>
           )}
@@ -29,10 +35,12 @@ export default function Layout() {
           {({ isActive }) => (
             <>
               <div className={isActive ? "bg-[#eee8d5] text-[#8c7a2e] p-3 rounded-2xl mb-1 border border-[#dcd7c5] glossy-bubble" : "p-3"}>
-                <span className="material-symbols-outlined text-[24px]"
-                  style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
-                  calendar_month
-                </span>
+              
+              <img
+                src="/icons/fi-rs-calendar.png"
+                alt="calendar"
+                className="w-6 h-6"
+              />
               </div>
               <span className="font-bold text-[10px] uppercase tracking-wider">캘린더</span>
             </>
@@ -45,10 +53,11 @@ export default function Layout() {
           {({ isActive }) => (
             <>
               <div className={isActive ? "bg-[#eee8d5] text-[#8c7a2e] p-3 rounded-2xl mb-1 border border-[#dcd7c5] glossy-bubble" : "p-3"}>
-                <span className="material-symbols-outlined text-[24px]"
-                  style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
-                  timer
-                </span>
+                <img
+                src="/icons/fi-rs-time-oclock.png"
+                alt="timer"
+                className="w-6 h-6"
+                />
               </div>
               <span className="font-bold text-[10px] uppercase tracking-wider">타이머</span>
             </>
@@ -61,10 +70,11 @@ export default function Layout() {
           {({ isActive }) => (
             <>
               <div className={isActive ? "bg-[#eee8d5] text-[#8c7a2e] p-3 rounded-2xl mb-1 border border-[#dcd7c5] glossy-bubble" : "p-3"}>
-                <span className="material-symbols-outlined text-[24px]"
-                  style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
-                  notes
-                </span>
+                <img
+                  src="/icons/fi-rs-file-ai.png"
+                  alt="memo"
+                  className="w-6 h-6"
+                />
               </div>
               <span className="font-bold text-[10px] uppercase tracking-wider">메모</span>
             </>

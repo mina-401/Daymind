@@ -20,8 +20,8 @@ export default function TodoModal({ isOpen, onClose, editTodo, date }: Props) {
 
   const [title, setTitle] = useState('')
   const [energy, setEnergy] = useState<EnergyLevel>('medium')
-  const [startTime, setStartTime] = useState('')  // ✅ 컴포넌트 안으로
-  const [endTime, setEndTime] = useState('')      // ✅ 컴포넌트 안으로
+  const [startTime, setStartTime] = useState('')  
+  const [endTime, setEndTime] = useState('')     
 
   useEffect(() => {
     if (editTodo) {

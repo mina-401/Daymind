@@ -41,9 +41,13 @@ export default function MemoCard({ memo }: Props) {
             e.stopPropagation()
             deleteMemo(memo.id)
           }}
-          className="flex-shrink-0 p-1.5 rounded-xl text-[#a4a4c4] hover:bg-red-50 hover:text-red-400 transition-colors"
+          className="flex-shrink-0 p-2 rounded-xl hover:bg-red-50 transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">delete</span>
+          <img
+            src="/icons/fi-rs-cross-small.png"
+            alt="delete"
+            className="w-5 h-5 opacity-60 hover:opacity-100"
+          />
         </button>
 
       </div>

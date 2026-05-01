@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import HabitList from '../components/habit/HabitList'
+import HabitModal from '../components/habit/HabitModal'
 import { useTodoStore } from '../store/todoStore'
 import TodoList from '../components/todo/TodoList'
 import TodoModal from '../components/todo/TodoModal'
@@ -12,6 +14,7 @@ export default function Today() {
   const { todos, rolloverTodos } = useTodoStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
+  const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<TabType>('일일')
 
   const today = new Date().toISOString().split('T')[0]
@@ -29,8 +32,8 @@ export default function Today() {
     setEditTodo(null)
   }
 
-  useEffect(() => {
-        rolloverTodos()
+    useEffect(() => {
+    rolloverTodos()
     }, [])
 
   return (
@@ -97,7 +100,41 @@ export default function Today() {
 
     {/* 탭 콘텐츠 */}
     {activeTab === '일일' && (
-    <TodoList todos={todayTodos} onEdit={handleEdit} />
+  <>
+    {/* 일일 퀘스트 */}
+    <div className="mb-2">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[16px]">⚔️</span>
+        <span className="font-bold text-[15px] text-[#4a443a]">일일 퀘스트</span>
+      </div>
+      <TodoList todos={todayTodos} onEdit={handleEdit} />
+    </div>
+
+    {/* 구분선 */}
+    <div className="flex items-center gap-3 my-4">
+      <div className="flex-grow h-px bg-[#eee]" />
+      <span className="text-[11px] font-bold text-[#c4bfb4]">HABIT QUEST</span>
+      <div className="flex-grow h-px bg-[#eee]" />
+    </div>
+
+    {/* 습관 퀘스트 */}
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-[16px]">🔥</span>
+          <span className="font-bold text-[15px] text-[#4a443a]">습관 퀘스트</span>
+        </div>
+        <button
+          onClick={() => setIsHabitModalOpen(true)}
+          className="bouncy-button text-[12px] font-bold text-[#a4a4c4] flex items-center gap-1"
+        >
+          <span className="material-symbols-outlined text-[16px]">add</span>
+          추가
+        </button>
+      </div>
+      <HabitList date={today} onAdd={() => setIsHabitModalOpen(true)} />
+    </div>
+  </>
     )}
     {activeTab === '주간' && <WeeklyView />}
 
@@ -108,7 +145,11 @@ export default function Today() {
         onClick={() => setIsModalOpen(true)}
         className="bouncy-button fixed bottom-28 right-5 w-14 h-14 bg-[#a4a4c4] rounded-2xl flex items-center justify-center shadow-lg"
       >
-        <span className="material-symbols-outlined text-white text-[28px]">add</span>
+        <img
+            src="/icons/fi-rs-plus.png"
+            alt="+"
+            className="w-6 h-6"
+        />
       </button>
 
       {/* 모달 */}
@@ -117,6 +158,12 @@ export default function Today() {
         onClose={handleClose}
         editTodo={editTodo}
         date={today}
+      />
+
+      {/* 습관 모달 추가 */}
+      <HabitModal
+        isOpen={isHabitModalOpen}
+        onClose={() => setIsHabitModalOpen(false)}
       />
     </>
   )

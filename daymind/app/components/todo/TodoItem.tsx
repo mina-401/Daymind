@@ -49,13 +49,21 @@ export default function TodoItem({ todo, onEdit }: Props) {
           onClick={() => onEdit(todo)}
           className="p-2 rounded-xl text-[#a4a4c4] hover:bg-[#eee8d5] transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">edit</span>
+          <img
+            src="/icons/fi-rs-pencil.png"
+            alt="edit"
+            className="w-5 h-5 opacity-60 hover:opacity-100"
+          />
         </button>
         <button
           onClick={() => deleteTodo(todo.id)}
           className="p-2 rounded-xl text-[#a4a4c4] hover:bg-red-50 hover:text-red-400 transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">delete</span>
+          <img
+            src="/icons/fi-rs-cross-small.png"
+            alt="delete"
+            className="w-5 h-5 opacity-60 hover:opacity-100"
+          />
         </button>
       </div>
 

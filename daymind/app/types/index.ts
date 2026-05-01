@@ -18,14 +18,27 @@ export type Memo = {
   id: string
   title: string
   content: string
-  linkedTodoId?: string   // 연결된 할일 id (선택)
+  linkedTodoId?: string   
   updatedAt: string
   createdAt: string
 }
 
 export type TimerSession = {
   id: string
-  todoId?: string         // 어떤 할일에 집중했는지 (선택)
-  duration: number        // 집중한 시간 (초)
-  completedAt: string
+  todoId?: string        
+  duration: number        
+}
+
+export type Habit = {
+  id: string
+  title: string
+  icon: string           
+  createdAt: string
+}
+
+export type HabitRecord = {
+  id: string
+  habitId: string      
+  date: string           
+  isCompleted: boolean
 }
