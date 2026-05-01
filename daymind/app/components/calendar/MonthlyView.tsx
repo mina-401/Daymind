@@ -179,7 +179,7 @@ const untimedTodos = selectedTodos.filter((t) => !t.startTime)
   </div>
 
   {/* 시간 미정 */}
-  {(
+  {selectedTodos.length > 0 &&(
     <div className="bg-white rounded-2xl p-4 border border-[#eee] mb-4">
       <div className="flex items-center gap-1.5 mb-3">
         
@@ -196,11 +196,13 @@ const untimedTodos = selectedTodos.filter((t) => !t.startTime)
   {/* 할일 없을 때 */}
   {selectedTodos.length === 0 && (
     <div className="flex flex-col items-center justify-center py-10 text-[#a4a4c4] mt-4">
-      <span className="material-symbols-outlined text-[40px] mb-2"
-        style={{ fontVariationSettings: "'FILL' 1" }}>
-        check_circle
-      </span>
-      <p className="font-bold text-[14px]">할 일이 없어요</p>
+      <img
+        src="/icons/fi-rr-apps-add.png"
+        alt="add"
+        className="w-5 h-5 opacity-60 hover:opacity-100"
+      />
+   
+    
     </div>
   )}
 </div>

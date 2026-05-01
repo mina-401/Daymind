@@ -2,9 +2,11 @@ import { useTimerStore } from '../store/timerStore'
 import TodoSelector from '../components/timer/TodoSelector'
 import TimerDisplay from '../components/timer/TimerDisplay'
 import TimerControls from '../components/timer/TimerControls'
+import { useTodoStore } from '../store/todoStore'
 
 export default function Timer() {
   const { sessions } = useTimerStore()
+  const { todos } = useTodoStore()  
 
   const today = new Date().toISOString().split('T')[0]
   const todaySessions = sessions.filter((s) =>
@@ -20,11 +22,12 @@ export default function Timer() {
         <div className="flex justify-between items-center">
           <h1 className="text-white font-bold text-xl px-2">타이머</h1>
           <div className="flex items-center gap-2 bg-[#3b3b55]/80 text-white pl-3 pr-4 py-1.5 rounded-full text-sm">
-            <span className="material-symbols-outlined text-[16px] text-cyan-300"
-              style={{ fontVariationSettings: "'FILL' 1" }}>
-              local_fire_department
-            </span>
-            <span className="font-bold">오늘 {todaySessions.length}세션</span>
+            <img
+              src="/icons/fi-rr-alarm-clock.png"
+              alt="session"
+              className="w-5 h-5 invert brightness-0 hover:opacity-100"
+            />
+            <span className="font-bold">{todaySessions.length} 세션</span>
             <span className="text-white/50 mx-1">|</span>
             <span className="font-bold">{totalMinutes}분</span>
           </div>
@@ -45,24 +48,28 @@ export default function Timer() {
         {/* 컨트롤 버튼 */}
         <TimerControls />
 
-        {/* 오늘 세션 기록 */}
-        {todaySessions.length > 0 && (
-          <div className="bg-white rounded-2xl border border-[#eee] p-4 mt-4">
-            <div className="flex items-center gap-1.5 mb-3">
-              <span className="material-symbols-outlined text-[16px] text-[#a4a4c4]">history</span>
-              <span className="text-[12px] font-bold text-[#a4a4c4] uppercase tracking-wider">
-                오늘 세션 기록
-              </span>
-            </div>
-            <div className="space-y-2">
-              {todaySessions.map((session, idx) => (
+       {/* 오늘 세션 기록 */}
+      {todaySessions.length > 0 && (
+        <div className="bg-white rounded-2xl border border-[#eee] p-4 mt-4">
+          <div className="flex items-center gap-1.5 mb-3">
+            <span className="text-[12px] font-bold text-[#a4a4c4] uppercase tracking-wider">
+              오늘 세션 기록
+            </span>
+          </div>
+          <div className="space-y-2">
+            {todaySessions.map((session, idx) => {
+              const linkedTodo = todos.find((t) => t.id === session.todoId)
+              return (
                 <div key={session.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-[12px] font-bold text-[#a4a4c4]">
-                      #{todaySessions.length - idx}
+                      #{idx + 1}
                     </span>
                     <span className="text-[13px] font-medium text-[#4a443a]">
-                      {Math.floor(session.duration / 60)}분 집중
+                      {linkedTodo ? linkedTodo.title : '자유 집중'}
+                    </span>
+                    <span className="text-[12px] text-[#a4a4c4]">
+                      {Math.floor(session.duration / 60)}분
                     </span>
                   </div>
                   <span className="text-[11px] text-[#a4a4c4]">
@@ -72,10 +79,11 @@ export default function Timer() {
                     })}
                   </span>
                 </div>
-              ))}
-            </div>
+              )
+            })}
           </div>
-        )}
+        </div>
+      )}
 
       </main>
     </>

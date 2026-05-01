@@ -5,16 +5,24 @@ import { useTodoStore } from '../store/todoStore'
 import TodoList from '../components/todo/TodoList'
 import TodoModal from '../components/todo/TodoModal'
 import RolloverBanner from '../components/today/RolloverBanner'
-import type { Todo } from '../types'
+import type { Todo,Stage } from '../types'
 import WeeklyView from '../components/today/WeeklyView'
+import RoutineMap from '../components/habit/RoutineMap'
+import StageEditor from '../components/habit/StageEditor'
 
-type TabType = '일일' | '주간'
+
+type TabType = '일일' | '주간' | '습관'
 
 export default function Today() {
   const { todos, rolloverTodos } = useTodoStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
+
+    const [isStageEditorOpen, setIsStageEditorOpen] = useState(false)
+    const [selectedRoutineId, setSelectedRoutineId] = useState('')
+    const [selectedOrder, setSelectedOrder] = useState(0)
+    const [editStage, setEditStage] = useState<Stage | null>(null)
   const [activeTab, setActiveTab] = useState<TabType>('일일')
 
   const today = new Date().toISOString().split('T')[0]
@@ -35,6 +43,8 @@ export default function Today() {
     useEffect(() => {
     rolloverTodos()
     }, [])
+
+
 
   return (
     <>
@@ -57,7 +67,7 @@ export default function Today() {
 
         {/* 탭 */}
         <div className="flex bg-white rounded-lg overflow-hidden h-12 shadow-sm mb-4">
-          {(['일일', '주간'] as TabType[]).map((tab) => (
+          {(['일일', '주간', '습관'] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -110,33 +120,26 @@ export default function Today() {
       <TodoList todos={todayTodos} onEdit={handleEdit} />
     </div>
 
-    {/* 구분선 */}
-    <div className="flex items-center gap-3 my-4">
-      <div className="flex-grow h-px bg-[#eee]" />
-      <span className="text-[11px] font-bold text-[#c4bfb4]">HABIT QUEST</span>
-      <div className="flex-grow h-px bg-[#eee]" />
-    </div>
 
-    {/* 습관 퀘스트 */}
-    <div>
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-[16px]">🔥</span>
-          <span className="font-bold text-[15px] text-[#4a443a]">습관 퀘스트</span>
-        </div>
-        <button
-          onClick={() => setIsHabitModalOpen(true)}
-          className="bouncy-button text-[12px] font-bold text-[#a4a4c4] flex items-center gap-1"
-        >
-          <span className="material-symbols-outlined text-[16px]">add</span>
-          추가
-        </button>
-      </div>
-      <HabitList date={today} onAdd={() => setIsHabitModalOpen(true)} />
-    </div>
+    
   </>
     )}
     {activeTab === '주간' && <WeeklyView />}
+    {activeTab === '습관' && (
+    <RoutineMap
+        onAddStage={(routineId, order) => {
+            setSelectedRoutineId(routineId)
+            setSelectedOrder(order)
+            setEditStage(null)
+            setIsStageEditorOpen(true)
+        }}
+        onEditStage={(routineId, stage) => {
+            setSelectedRoutineId(routineId)
+            setEditStage(stage)
+            setIsStageEditorOpen(true)
+        }}
+    />
+    )}
 
       </main>
 
@@ -165,6 +168,21 @@ export default function Today() {
         isOpen={isHabitModalOpen}
         onClose={() => setIsHabitModalOpen(false)}
       />
+
+      <StageEditor
+        isOpen={isStageEditorOpen}
+        onClose={() => {
+            setIsStageEditorOpen(false)
+            setEditStage(null)
+        }}
+        routineId={selectedRoutineId}
+        order={selectedOrder}
+        editStage={editStage}
+        />
     </>
+
+    
   )
+
+  
 }

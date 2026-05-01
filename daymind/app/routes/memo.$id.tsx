@@ -213,10 +213,11 @@ export default function MemoDetail() {
             disabled={isLoading || !content.trim()}
             className="bouncy-button flex-1 flex items-center justify-center gap-2 bg-[#a4a4c4] rounded-2xl py-3.5 font-bold text-[13px] text-white disabled:opacity-40"
           >
-            <span className="material-symbols-outlined text-[18px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}>
-              checklist
-            </span>
+            <img
+              src="/icons/fi-rr-apps-add.png"
+              alt="add"
+              className="w-5 h-5 opacity-60 hover:opacity-100"
+            />
             {isLoading ? '처리 중...' : '할일 추출'}
           </button>
         </div>

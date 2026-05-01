@@ -20,10 +20,11 @@ export default function TodoItem({ todo, onEdit }: Props) {
         style={{ backgroundColor: todo.isCompleted ? '#a4a4c4' : 'transparent' }}
       >
         {todo.isCompleted && (
-          <span className="material-symbols-outlined text-white text-[16px]"
-            style={{ fontVariationSettings: "'FILL' 1" }}>
-            check
-          </span>
+           <img
+              src="/icons/fi-rs-check.png"
+              alt="check"
+              className="w-5 h-5 opacity-60 hover:opacity-100"
+            />
         )}
       </button>
 

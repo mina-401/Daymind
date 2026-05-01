@@ -60,7 +60,11 @@ export default function HabitItem({ habit, date }: Props) {
             onClick={() => deleteHabit(habit.id)}
             className="p-1.5 rounded-xl text-[#a4a4c4] hover:bg-red-50 hover:text-red-400 transition-colors"
           >
-            <span className="material-symbols-outlined text-[16px]">delete</span>
+            <img
+              src="/icons/fi-rs-cross-small.png"
+              alt="delete"
+              className="w-5 h-5 opacity-60 hover:opacity-100"
+            />
           </button>
           <button
             onClick={() => toggleHabitRecord(habit.id, date)}
@@ -70,10 +74,11 @@ export default function HabitItem({ habit, date }: Props) {
                 : 'bg-[#f7f4e9] border-2 border-[#dcd7c5] text-[#a4a4c4]'
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]"
-              style={{ fontVariationSettings: completed ? "'FILL' 1" : "'FILL' 0" }}>
-              check
-            </span>
+             <img
+              src="/icons/fi-rs-check.png"
+              alt="check"
+              className="w-5 h-5 opacity-60 hover:opacity-100"
+            />
           </button>
         </div>
 
