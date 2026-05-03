@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import HabitList from '../components/habit/HabitList'
 import HabitModal from '../components/habit/HabitModal'
 import { useTodoStore } from '../store/todoStore'
+import { useRoutineStore } from '../store/routineStore'
 import TodoList from '../components/todo/TodoList'
 import TodoModal from '../components/todo/TodoModal'
 import RolloverBanner from '../components/today/RolloverBanner'
@@ -10,6 +11,7 @@ import WeeklyView from '../components/today/WeeklyView'
 import RoutineMap from '../components/habit/RoutineMap'
 import StageEditor from '../components/habit/StageEditor'
 import DraggableButton from '../components/ui/DraggableButton'
+
 
 
 type TabType = '일일' | '주간' | '습관'
@@ -25,10 +27,14 @@ export default function Today() {
     const [selectedOrder, setSelectedOrder] = useState(0)
     const [editStage, setEditStage] = useState<Stage | null>(null)
   const [activeTab, setActiveTab] = useState<TabType>('일일')
+    const { routines, getTotalXP } = useRoutineStore()
 
   const today = new Date().toISOString().split('T')[0]
   const todayTodos = todos.filter((t) => t.date === today)
   const completedCount = todayTodos.filter((t) => t.isCompleted).length
+
+  const routineXP = routines.reduce((acc, r) => acc + getTotalXP(r.id), 0)
+  const totalXP = completedCount * 10 + routineXP
   const progressPercent = todayTodos.length === 0 ? 0 : (completedCount / todayTodos.length) * 100
 
   const handleEdit = (todo: Todo) => {
@@ -69,7 +75,7 @@ export default function Today() {
             bolt
           </span>
           <span className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>
-            {completedCount * 10} xp
+            {totalXP} xp
           </span>
         </div>
       </div>
