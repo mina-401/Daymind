@@ -50,61 +50,131 @@ export default function Today() {
   return (
     <>
       {/* 헤더 */}
-      <header className="bg-[#a4a4c4] pt-4 pb-6 px-4 rounded-b-[24px]">
-        
+    <header className="app-header px-5 py-4">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center border-2"
+            style={{ backgroundColor: 'var(--color-primary-container)', borderColor: 'var(--color-primary-border)' }}>
+            <span className="material-symbols-outlined text-[20px]"
+              style={{ color: 'var(--color-primary)', fontVariationSettings: "'FILL' 1" }}>
+              person
+            </span>
+          </div>
+          <h1 className="font-bold text-xl" style={{ color: 'var(--color-primary)' }}>퀘스트</h1>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border-2"
+          style={{ backgroundColor: 'var(--color-surface-container)', borderColor: 'var(--color-primary-container)' }}>
+          <span className="material-symbols-outlined text-[16px]"
+            style={{ color: 'var(--color-primary)', fontVariationSettings: "'FILL' 1" }}>
+            bolt
+          </span>
+          <span className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>
+            {completedCount * 10} xp
+          </span>
+        </div>
+      </div>
+    </header>
+
+    {/* 탭 + 진행률 */}
+    <div className="px-5 pt-4 pb-2 max-w-2xl mx-auto">
+      {/* 탭 */}
+      <div className="tab-nav flex gap-2 mb-4">
+        {(['일일', '주간', '습관'] as TabType[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`flex-1 py-2.5 font-bold text-sm transition-all ${
+              activeTab === tab ? 'tab-active' : 'tab-inactive'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* 진행 로드맵 */}
+    {activeTab === '일일' && (
+      <div className="rounded-[32px] p-5 mb-2 border"
+        style={{ backgroundColor: 'white', borderColor: 'var(--color-primary-container)' }}>
+
         {/* 타이틀 */}
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-white font-bold text-xl px-2">퀘스트</h1>
-          <div className="flex items-center gap-2 bg-[#3b3b55]/80 text-white pl-2 pr-4 py-1.5 rounded-full text-sm">
-            <span className="material-symbols-outlined text-yellow-300 text-[16px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}>
-              bolt
-            </span>
-            <span className="font-bold">{completedCount}</span>
-            <span className="text-white/50">/</span>
-            <span className="font-bold">{todayTodos.length}</span>
-          </div>
+          <h3 className="font-bold text-[15px]" style={{ color: 'var(--color-primary)' }}>
+            오늘의 진행도
+          </h3>
+          <span className="text-[11px] font-bold px-2 py-1 rounded-full uppercase tracking-wider"
+            style={{ backgroundColor: 'var(--color-tertiary-container)', color: 'var(--color-tertiary)' }}>
+            {Math.round(progressPercent)}% 완료
+          </span>
         </div>
 
-        {/* 탭 */}
-        <div className="flex bg-white rounded-lg overflow-hidden h-12 shadow-sm mb-4">
-          {(['일일', '주간', '습관'] as TabType[]).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`flex-1 font-bold text-sm transition-colors ${
-                activeTab === tab
-                  ? 'game-tab-active'
-                  : 'text-[#a4a4c4] border-r border-[#eee] last:border-r-0'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {/* 진행률 바 */}
-        <div className="px-2">
-          <div className="flex justify-between text-[12px] font-bold text-white/80 mb-1.5">
-            <span>오늘 진행률</span>
-            <span>{Math.round(progressPercent)}%</span>
-          </div>
-          <div className="h-2 bg-white/30 rounded-full overflow-hidden">
+        {/* 진행바 */}
+        <div className="relative pt-2 pb-2">
+          <div className="progress-track h-4 w-full">
             <div
-              className="h-full bg-gradient-to-r from-yellow-300 to-cyan-300 rounded-full transition-all duration-500"
+              className="progress-fill h-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <div className="flex justify-between text-[11px] text-white/60 mt-1">
-            <span>완료 {completedCount}개</span>
-            <span>전체 {todayTodos.length}개</span>
+
+            {/* 마일스톤 */}
+
+            <div className="flex justify-between mt-3">
+              {todayTodos.length === 0 ? (
+                <div className="w-full text-center">
+                  <span className="text-[11px] font-bold" style={{ color: 'var(--color-text-light)' }}>
+                    할일을 추가하면 마일스톤이 생성돼요!
+                  </span>
+                </div>
+              ) : (
+                [...todayTodos, null].map((_, idx) => {
+                  const milestoneXP = idx * 10
+                  const currentXP = completedCount * 10
+                  const isReached = currentXP >= milestoneXP
+                  const isLast = idx === todayTodos.length
+
+                  return (
+                    <div key={idx} className="flex flex-col items-center gap-1">
+                      <span
+                        className="material-symbols-outlined text-[20px]"
+                        style={{
+                          color: isReached
+                            ? isLast ? 'var(--color-primary)' : '#dcc66e'
+                            : 'var(--color-text-light)',
+                          fontVariationSettings: isReached ? "'FILL' 1" : "'FILL' 0",
+                        }}
+                      >
+                        {isLast ? 'redeem' : 'inventory_2'}
+                      </span>
+                      <span className="text-[10px] font-bold"
+                        style={{ color: isReached ? 'var(--color-primary)' : 'var(--color-text-light)' }}>
+                        {milestoneXP}
+                      </span>
+                    </div>
+                  )
+                })
+              )}
+            </div>
           </div>
-        </div>
 
-      </header>
+          {/* 남은 할일 */}
+          <div className="flex justify-center mt-3">
+            <span className="text-[12px] font-bold"
+              style={{ color: 'var(--color-text-muted)' }}>
+              {todayTodos.length === 0
+                ? '할일을 추가해보세요!'
+                : completedCount === todayTodos.length
+                ? '🎉 오늘 퀘스트 완료!'
+                : `${todayTodos.length - completedCount}개 남음`}
+            </span>
+          </div>
 
-      {/* 메인 */}
-      <main className="px-4 mt-5 space-y-4 max-w-2xl mx-auto">
+      </div>
+    )}
+    </div>
+
+    {/* 메인 */}
+    <main className="px-4 mt-5 space-y-4 max-w-2xl mx-auto">
 
     {/* 이월 배너 */}
     <RolloverBanner todos={todos} />

@@ -10,62 +10,151 @@ type Props = {
 export default function TodoItem({ todo, onEdit }: Props) {
   const { toggleTodo, deleteTodo } = useTodoStore()
 
-  return (
-    <div className={`bg-white rounded-2xl p-4 border border-[#eee] flex items-center gap-4 transition-opacity ${todo.isCompleted ? 'opacity-50' : ''}`}>
-      
-      {/* 체크박스 */}
-      <button
-        onClick={() => toggleTodo(todo.id)}
-        className="bouncy-button flex-shrink-0 w-6 h-6 rounded-full border-2 border-[#dcd7c5] flex items-center justify-center"
-        style={{ backgroundColor: todo.isCompleted ? '#a4a4c4' : 'transparent' }}
-      >
-        {todo.isCompleted && (
-           <img
-              src="/icons/fi-rs-check.png"
-              alt="check"
-              className="w-5 h-5 opacity-60 hover:opacity-100"
-            />
-        )}
-      </button>
+  const energyIcon = {
+    high: 'swords',
+    medium: 'eco',
+    low: 'exercise',
+  }[todo.energy]
 
-      {/* 내용 */}
-      <div className="flex-grow">
-        <p className={`font-bold text-[15px] ${todo.isCompleted ? 'line-through text-[#a4a4c4]' : 'text-[#4a443a]'}`}>
-          {todo.title}
-        </p>
-        <div className="mt-1.5 flex items-center gap-2">
-          <EnergyTag energy={todo.energy} />
-          {todo.rolledOver && (
-            <span className="text-[11px] font-bold text-[#a4a4c4] flex items-center gap-0.5">
-              <span className="material-symbols-outlined text-[12px]">history</span>
-              이월
-            </span>
-          )}
+  const energyBg = {
+    high: 'var(--color-error-container)',
+    medium: '#f9e287',
+    low: 'var(--color-tertiary-container)',
+  }[todo.energy]
+
+  const energyColor = {
+    high: 'var(--color-error)',
+    medium: '#534600',
+    low: 'var(--color-tertiary)',
+  }[todo.energy]
+
+  if (todo.isCompleted) {
+    return (
+      <div
+        className="rounded-[28px] p-4 flex items-center gap-4 border-2 border-dashed opacity-80"
+        style={{ backgroundColor: 'var(--color-surface-container)', borderColor: 'var(--color-text-light)' }}
+      >
+        {/* 아이콘 */}
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+          style={{ backgroundColor: 'var(--color-surface-dim)' }}>
+          <span className="material-symbols-outlined text-[28px]"
+            style={{ color: 'var(--color-text-muted)', fontVariationSettings: "'FILL' 1" }}>
+            {energyIcon}
+          </span>
         </div>
+
+        {/* 내용 */}
+        <div className="flex-grow min-w-0">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="font-bold text-[15px] truncate line-through"
+              style={{ color: 'var(--color-text-muted)' }}>
+              {todo.title}
+            </span>
+            <EnergyTag energy={todo.energy} />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-grow h-2 rounded-full overflow-hidden"
+              style={{ backgroundColor: 'var(--color-surface-dim)' }}>
+              <div className="h-full w-full rounded-full"
+                style={{ backgroundColor: 'var(--color-text-muted)' }} />
+            </div>
+            <span className="text-[11px] font-bold flex-shrink-0"
+              style={{ color: 'var(--color-text-muted)' }}>
+              1/1
+            </span>
+          </div>
+        </div>
+
+        {/* DONE 뱃지 */}
+        <button
+          onClick={() => toggleTodo(todo.id)}
+          className="bouncy-button flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-[13px]"
+          style={{ backgroundColor: 'var(--color-surface-dim)', color: 'var(--color-text-muted)' }}
+        >
+          <span className="material-symbols-outlined text-[22px]"
+            style={{ fontVariationSettings: "'FILL' 1" }}>
+            pets
+          </span>
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="quest-card p-4 flex items-center gap-4">
+
+      {/* 아이콘 */}
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+        style={{ backgroundColor: energyBg }}>
+        <span className="material-symbols-outlined text-[28px]"
+          style={{ color: energyColor, fontVariationSettings: "'FILL' 1" }}>
+          {energyIcon}
+        </span>
       </div>
 
-      {/* 액션 버튼 */}
-      <div className="flex items-center gap-1 flex-shrink-0">
+      {/* 내용 */}
+      <div className="flex-grow min-w-0">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="font-bold text-[15px] truncate"
+            style={{ color: 'var(--color-text)' }}>
+            {todo.title}
+          </span>
+          <EnergyTag energy={todo.energy} />
+        </div>
+
+        {/* 진행바 */}
+        <div className="flex items-center gap-2">
+          <div className="progress-track flex-grow h-2">
+            <div className="h-full w-0 rounded-full" />
+          </div>
+          <span className="text-[11px] font-bold flex-shrink-0"
+            style={{ color: 'var(--color-text-muted)' }}>
+            0/1
+          </span>
+        </div>
+
+        {/* 이월 태그 */}
+        {todo.rolledOver && (
+          <span className="text-[11px] font-bold mt-1 flex items-center gap-0.5"
+            style={{ color: 'var(--color-text-light)' }}>
+            <span className="material-symbols-outlined text-[12px]">history</span>
+            이월
+          </span>
+        )}
+      </div>
+
+      {/* 체크 버튼 + 액션 */}
+      <div className="flex flex-col gap-1.5 flex-shrink-0 items-center">
         <button
-          onClick={() => onEdit(todo)}
-          className="p-2 rounded-xl text-[#a4a4c4] hover:bg-[#eee8d5] transition-colors"
+          onClick={() => toggleTodo(todo.id)}
+          className="bouncy-button w-12 h-12 font-bold rounded-full flex items-center justify-center"
+          style={{
+            backgroundColor: 'var(--color-primary)',
+            color: 'white',
+          }}
         >
-          <img
-            src="/icons/fi-rs-pencil.png"
-            alt="edit"
-            className="w-5 h-5 opacity-60 hover:opacity-100"
-          />
+          <span className="material-symbols-outlined text-[22px]"
+            style={{ fontVariationSettings: "'FILL' 1" }}>
+            pets
+          </span>
         </button>
-        <button
-          onClick={() => deleteTodo(todo.id)}
-          className="p-2 rounded-xl text-[#a4a4c4] hover:bg-red-50 hover:text-red-400 transition-colors"
-        >
-          <img
-            src="/icons/fi-rs-cross-small.png"
-            alt="delete"
-            className="w-5 h-5 opacity-60 hover:opacity-100"
-          />
-        </button>
+
+        <div className="flex gap-1 justify-center">
+          <button
+            onClick={() => onEdit(todo)}
+            className="w-5 h-5 flex items-center justify-center"
+            style={{ color: 'var(--color-text-light)' }}
+          >
+            <span className="material-symbols-outlined text-[14px]">edit</span>
+          </button>
+          <button
+            onClick={() => deleteTodo(todo.id)}
+            className="w-5 h-5 flex items-center justify-center"
+            style={{ color: 'var(--color-text-light)' }}
+          >
+            <span className="material-symbols-outlined text-[14px]">delete</span>
+          </button>
+        </div>
       </div>
 
     </div>
