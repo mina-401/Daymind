@@ -26,7 +26,7 @@ export default function RolloverBanner({ todos }: Props) {
             history
           </span>
           <span className="font-bold text-[13px] text-yellow-700">
-            어제 미완료 {rolloverTodos.length}개 이월됨
+            어제 미완료 {rolloverTodos.length}개 추가됨
           </span>
         </div>
         <span className="material-symbols-outlined text-[18px] text-yellow-500 transition-transform"

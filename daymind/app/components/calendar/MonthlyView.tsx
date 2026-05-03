@@ -4,6 +4,7 @@ import TodoItem from '../todo/TodoItem'
 import TodoModal from '../todo/TodoModal'
 import type { Todo } from '../../types'
 import EnergyTag from '../ui/EnergyTag'
+import DraggableButton from '../ui/DraggableButton'
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i)
 
@@ -206,13 +207,12 @@ const untimedTodos = selectedTodos.filter((t) => !t.startTime)
     </div>
   )}
 </div>
-      {/* 추가 버튼 */}
-      <button
+      <DraggableButton
         onClick={() => setIsModalOpen(true)}
-        className="bouncy-button fixed bottom-28 right-5 w-14 h-14 bg-[#a4a4c4] rounded-2xl flex items-center justify-center shadow-lg"
+        storageKey="daymind-btn-calendar"
       >
         <span className="material-symbols-outlined text-white text-[28px]">add</span>
-      </button>
+      </DraggableButton>
 
       {/* 모달 */}
       <TodoModal

@@ -12,77 +12,70 @@ export default function HabitItem({ habit, date }: Props) {
   const streak = getStreak(habit.id)
 
   return (
-    <div className={`bg-white rounded-2xl p-4 border transition-all ${
-      completed ? 'border-[#a4a4c4] bg-[#f5f3ff]' : 'border-[#eee]'
-    }`}>
-      <div className="flex items-center gap-3">
+    <div className={` bg-white rounded-2xl p-4 border transition-all ${
+  completed ? 'border-[#a4a4c4] bg-[#f5f3ff]' : 'border-[#eee]'
+}`}>
+  <div className="flex gap-3 items-center">
 
-        {/* 이모지 아이콘 */}
-        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-[24px] flex-shrink-0 ${
-          completed ? 'bg-[#a4a4c4]/20' : 'bg-[#f7f4e9]'
-        }`}>
-          {habit.icon}
-        </div>
+    {/* 좌측: 아이콘 + streak */}
+    <div className="flex flex-col items-center flex-shrink-0">
+      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center text-[20px] sm:text-[24px] ${
+        completed ? 'bg-[#a4a4c4]/20' : 'bg-[#f7f4e9]'
+      }`}>
+        {habit.icon}
+      </div>
 
-        {/* 내용 */}
-        <div className="flex-grow">
-          <div className="flex items-center gap-2">
-            <span className={`font-bold text-[15px] ${
-              completed ? 'text-[#a4a4c4] line-through' : 'text-[#4a443a]'
-            }`}>
-              {habit.title}
-            </span>
-          </div>
-
-          {/* 스트릭 */}
-          <div className="flex items-center gap-1 mt-0.5">
-            {streak > 0 ? (
-              <>
-                <span className="text-[14px]">🔥</span>
-                <span className="text-[12px] font-bold text-orange-400">
-                  {streak}일 연속
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-[14px]">💀</span>
-                <span className="text-[12px] font-bold text-[#c4bfb4]">
-                  0일 연속
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* 체크 버튼 */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <button
-            onClick={() => deleteHabit(habit.id)}
-            className="p-1.5 rounded-xl text-[#a4a4c4] hover:bg-red-50 hover:text-red-400 transition-colors"
-          >
-            <img
-              src="/icons/fi-rs-cross-small.png"
-              alt="delete"
-              className="w-5 h-5 opacity-60 hover:opacity-100"
-            />
-          </button>
-          <button
-            onClick={() => toggleHabitRecord(habit.id, date)}
-            className={`bouncy-button w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
-              completed
-                ? 'bg-[#a4a4c4] text-white'
-                : 'bg-[#f7f4e9] border-2 border-[#dcd7c5] text-[#a4a4c4]'
-            }`}
-          >
-             <img
-              src="/icons/fi-rs-check.png"
-              alt="check"
-              className="w-5 h-5 opacity-60 hover:opacity-100"
-            />
-          </button>
-        </div>
-
+      <div className="flex items-center gap-1 mt-1">
+        <span className="text-[12px]">🔥</span>
+        <span className="text-[11px] font-bold text-orange-400">
+          {streak}
+        </span>
       </div>
     </div>
+
+    {/* 가운데: 텍스트 */}
+    <div className="flex-grow min-w-0">
+      <p className={`font-bold text-[14px] sm:text-[15px] truncate ${
+        completed ? 'text-[#a4a4c4] line-through' : 'text-[#4a443a]'
+      }`}>
+        {habit.title}
+      </p>
+    </div>
+
+    {/* 우측: 버튼 */}
+    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+
+      {/* 삭제 */}
+      <button
+        onClick={() => deleteHabit(habit.id)}
+        className="p-1.5 rounded-xl hover:bg-red-50 transition"
+      >
+        <img
+          src="/icons/fi-rs-cross-small.png"
+          className="w-4 h-4 sm:w-5 sm:h-5 opacity-60"
+        />
+      </button>
+
+      {/* 체크 */}
+      <button
+        onClick={() => toggleHabitRecord(habit.id, date)}
+        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition ${
+          completed
+            ? 'bg-[#a4a4c4]'
+            : 'bg-[#f7f4e9] border border-[#dcd7c5]'
+        }`}
+      >
+        <img
+          src="/icons/fi-rs-check.png"
+          className={`w-4 h-4 sm:w-5 sm:h-5 ${
+            completed ? 'invert brightness-0' : 'opacity-60'
+          }`}
+        />
+      </button>
+
+    </div>
+
+  </div>
+</div>
   )
 }

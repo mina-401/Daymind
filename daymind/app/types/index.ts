@@ -18,7 +18,8 @@ export type Memo = {
   id: string
   title: string
   content: string
-  linkedTodoId?: string   
+  date?: string           
+  linkedTodoId?: string
   updatedAt: string
   createdAt: string
 }
@@ -48,10 +49,10 @@ export type Stage = {
   id: string
   title: string
   icon: string
-  targetDays: number      // 목표 일수 (7, 14, 30 등)
-  rewardXP: number        // 보상 경험치
-  order: number           // 세로 순서
-  parallelGroup?: string  // 같은 값이면 병렬 (같은 줄)
+  targetDays: number     
+  rewardXP: number        
+  order: number        
+  parallelGroup?: string  
   createdAt: string
 }
 
@@ -59,7 +60,7 @@ export type Stage = {
 export type StageRecord = {
   id: string
   stageId: string
-  date: string            // "2026-05-01"
+  date: string            
   isCompleted: boolean
 }
 

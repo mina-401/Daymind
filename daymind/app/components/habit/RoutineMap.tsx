@@ -13,6 +13,8 @@ export default function RoutineMap({ onAddStage, onEditStage }: Props) {
   const [newRoutineTitle, setNewRoutineTitle] = useState('')
   const [isAddingRoutine, setIsAddingRoutine] = useState(false)
 
+  //console.log('routines:', routines) // ← 임시 추가
+
   const handleAddRoutine = () => {
     if (!newRoutineTitle.trim()) return
     addRoutine(newRoutineTitle)

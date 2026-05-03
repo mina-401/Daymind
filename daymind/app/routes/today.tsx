@@ -9,6 +9,7 @@ import type { Todo,Stage } from '../types'
 import WeeklyView from '../components/today/WeeklyView'
 import RoutineMap from '../components/habit/RoutineMap'
 import StageEditor from '../components/habit/StageEditor'
+import DraggableButton from '../components/ui/DraggableButton'
 
 
 type TabType = '일일' | '주간' | '습관'
@@ -144,16 +145,12 @@ export default function Today() {
       </main>
 
       {/* 추가 버튼 */}
-      <button
+      <DraggableButton
         onClick={() => setIsModalOpen(true)}
-        className="bouncy-button fixed bottom-28 right-5 w-14 h-14 bg-[#a4a4c4] rounded-2xl flex items-center justify-center shadow-lg"
+        storageKey="daymind-btn-today"
       >
-        <img
-            src="/icons/fi-rs-plus.png"
-            alt="+"
-            className="w-6 h-6"
-        />
-      </button>
+        <span className="material-symbols-outlined text-white text-[28px]">add</span>
+      </DraggableButton>
 
       {/* 모달 */}
       <TodoModal
