@@ -73,7 +73,7 @@ export default function Layout() {
                 />
               </div>
               <span className={`font-bold text-[10px] uppercase tracking-wider ${isActive ? 'text-[#674bb5]' : 'text-[#7a7583]'}`}>
-                메모
+                요약
               </span>
             </div>
           )}

@@ -21,6 +21,7 @@ export default function MemoDetail() {
   const [content, setContent] = useState(memo?.content ?? '')
   const [isLoading, setIsLoading] = useState(false)
   const [aiResult, setAiResult] = useState<AIResult>(null)
+  const [isSaved, setIsSaved] = useState(true)
 
   useEffect(() => {
     if (!memo) navigate('/memo')
@@ -28,8 +29,10 @@ export default function MemoDetail() {
 
   useEffect(() => {
     if (!id) return
+    setIsSaved(false)
     const timer = setTimeout(() => {
       updateMemo(id, { title, content })
+      setIsSaved(true)
     }, 1000)
     return () => clearTimeout(timer)
   }, [title, content])
@@ -40,7 +43,6 @@ export default function MemoDetail() {
     navigate('/memo')
   }
 
-  // Claude API 호출
   const callClaude = async (prompt: string) => {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -60,7 +62,6 @@ export default function MemoDetail() {
     return data.content[0].text as string
   }
 
-  // 요약하기
   const handleSummary = async () => {
     if (!content.trim()) return
     setIsLoading(true)
@@ -70,14 +71,13 @@ export default function MemoDetail() {
         `다음 메모를 3줄 이내로 핵심만 간결하게 요약해줘. 한국어로 답해:\n\n${content}`
       )
       setAiResult({ type: 'summary', text })
-    } catch (e) {
+    } catch {
       alert('오류가 발생했어요. 다시 시도해주세요.')
     } finally {
       setIsLoading(false)
     }
   }
 
-  // 할일 추출
   const handleExtractTodos = async () => {
     if (!content.trim()) return
     setIsLoading(true)
@@ -88,8 +88,6 @@ export default function MemoDetail() {
         반드시 아래 형식으로만 답해 (다른 말 없이):
         - 할일1
         - 할일2
-        - 할일3
-        
         메모:\n\n${content}`
       )
       const items = text
@@ -98,14 +96,13 @@ export default function MemoDetail() {
         .map((line) => line.replace(/^-\s*/, '').trim())
         .filter(Boolean)
       setAiResult({ type: 'todos', items })
-    } catch (e) {
+    } catch {
       alert('오류가 발생했어요. 다시 시도해주세요.')
     } finally {
       setIsLoading(false)
     }
   }
 
-  // 추출된 할일 추가
   const handleAddTodo = (todoTitle: string) => {
     const today = new Date().toISOString().split('T')[0]
     addTodo(todoTitle, today, 'medium' as EnergyLevel)
@@ -114,74 +111,107 @@ export default function MemoDetail() {
   if (!memo) return null
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--color-surface)' }}>
 
       {/* 헤더 */}
-      <header className="bg-[#a4a4c4] pt-4 pb-6 px-4 rounded-b-[24px]">
+      <header className="app-header px-5 py-4">
         <div className="flex justify-between items-center">
           <button
             onClick={() => navigate('/memo')}
-            className="bouncy-button flex items-center gap-1 text-white/80 hover:text-white"
+            className="bouncy-button flex items-center gap-1.5"
+            style={{ color: 'var(--color-primary)' }}
           >
             <span className="material-symbols-outlined text-[22px]">arrow_back</span>
-            <span className="font-bold text-[14px]">메모</span>
+            <span className="font-bold text-[14px]">데일리 로그</span>
           </button>
-          <button
-            onClick={handleDelete}
-            className="bouncy-button flex items-center gap-1 bg-[#3b3b55]/80 text-white pl-3 pr-4 py-1.5 rounded-full text-sm"
-          >
-            <span className="material-symbols-outlined text-[16px]">delete</span>
-            <span className="font-bold text-[13px]">삭제</span>
-          </button>
+
+          <div className="flex items-center gap-2">
+            {/* 저장 상태 */}
+            <span className="text-[11px] font-bold"
+              style={{ color: isSaved ? 'var(--color-tertiary)' : 'var(--color-text-light)' }}>
+              {isSaved ? '저장됨 ✓' : '저장 중...'}
+            </span>
+
+            {/* 삭제 버튼 */}
+            <button
+              onClick={handleDelete}
+              className="bouncy-button flex items-center gap-1 px-3 py-1.5 rounded-full border-2"
+              style={{
+                backgroundColor: 'var(--color-error-container)',
+                borderColor: '#fca5a5',
+                color: 'var(--color-error)',
+              }}
+            >
+              <span className="material-symbols-outlined text-[16px]">delete</span>
+              <span className="font-bold text-[13px]">삭제</span>
+            </button>
+          </div>
         </div>
       </header>
 
       {/* 편집 영역 */}
       <main className="flex-grow px-5 pt-6 pb-48 max-w-2xl mx-auto w-full">
 
+        {/* 제목 */}
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목"
-          className="w-full text-[22px] font-bold text-[#4a443a] placeholder-[#c4bfb4] bg-transparent outline-none mb-4"
+          className="w-full text-[22px] font-bold bg-transparent outline-none mb-4"
+          style={{ color: 'var(--color-text)', caretColor: 'var(--color-primary)' }}
         />
 
-        <div className="h-px bg-[#eee] mb-4" />
+        <div className="h-px mb-4" style={{ backgroundColor: 'var(--color-primary-container)' }} />
 
+        {/* 내용 */}
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력하세요..."
-          className="w-full text-[15px] text-[#4a443a] placeholder-[#c4bfb4] bg-transparent outline-none resize-none leading-relaxed"
-          style={{ minHeight: 'calc(100vh - 320px)' }}
+          className="w-full text-[15px] bg-transparent outline-none resize-none leading-relaxed"
+          style={{
+            minHeight: 'calc(100vh - 320px)',
+            color: 'var(--color-text)',
+            caretColor: 'var(--color-primary)',
+          }}
         />
 
         {/* AI 결과 */}
         {aiResult && (
-          <div className="bg-[#eee8d5] border border-[#dcd7c5] rounded-2xl p-4 mt-4">
+          <div className="rounded-[28px] border-2 p-5 mt-4"
+            style={{
+              backgroundColor: 'var(--color-primary-container)',
+              borderColor: 'var(--color-primary-border)',
+            }}>
             <div className="flex items-center gap-1.5 mb-3">
-              <span className="material-symbols-outlined text-[16px] text-[#8c7a2e]"
-                style={{ fontVariationSettings: "'FILL' 1" }}>
+              <span className="material-symbols-outlined text-[16px]"
+                style={{ color: 'var(--color-primary)', fontVariationSettings: "'FILL' 1" }}>
                 auto_awesome
               </span>
-              <span className="text-[12px] font-bold text-[#8c7a2e] uppercase tracking-wider">
+              <span className="text-[12px] font-bold uppercase tracking-wider"
+                style={{ color: 'var(--color-primary)' }}>
                 {aiResult.type === 'summary' ? 'AI 요약' : 'AI 할일 추출'}
               </span>
             </div>
 
             {aiResult.type === 'summary' && (
-              <p className="text-[14px] text-[#4a443a] leading-relaxed">{aiResult.text}</p>
+              <p className="text-[14px] leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                {aiResult.text}
+              </p>
             )}
 
             {aiResult.type === 'todos' && (
               <div className="space-y-2">
                 {aiResult.items.map((item, idx) => (
                   <div key={idx} className="flex items-center justify-between gap-3">
-                    <span className="text-[14px] text-[#4a443a] flex-grow">{item}</span>
+                    <span className="text-[14px] flex-grow" style={{ color: 'var(--color-text)' }}>
+                      {item}
+                    </span>
                     <button
                       onClick={() => handleAddTodo(item)}
-                      className="bouncy-button flex-shrink-0 bg-[#a4a4c4] text-white text-[11px] font-bold px-3 py-1.5 rounded-full"
+                      className="bouncy-button flex-shrink-0 text-white text-[11px] font-bold px-3 py-1.5 rounded-full"
+                      style={{ backgroundColor: 'var(--color-primary)' }}
                     >
                       + 할일 추가
                     </button>
@@ -200,7 +230,12 @@ export default function MemoDetail() {
           <button
             onClick={handleSummary}
             disabled={isLoading || !content.trim()}
-            className="bouncy-button flex-1 flex items-center justify-center gap-2 bg-white border border-[#dcd7c5] rounded-2xl py-3.5 font-bold text-[13px] text-[#8c7a2e] disabled:opacity-40"
+            className="bouncy-button flex-1 flex items-center justify-center gap-2 rounded-[28px] py-3.5 font-bold text-[13px] border-2 disabled:opacity-40"
+            style={{
+              backgroundColor: 'white',
+              borderColor: 'var(--color-primary-container)',
+              color: 'var(--color-primary)',
+            }}
           >
             <span className="material-symbols-outlined text-[18px]"
               style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -211,19 +246,15 @@ export default function MemoDetail() {
           <button
             onClick={handleExtractTodos}
             disabled={isLoading || !content.trim()}
-            className="bouncy-button flex-1 flex items-center justify-center gap-2 bg-[#a4a4c4] rounded-2xl py-3.5 font-bold text-[13px] text-white disabled:opacity-40"
+            className="bouncy-button flex-1 flex items-center justify-center gap-2 rounded-[28px] py-3.5 font-bold text-[13px] disabled:opacity-40"
+            style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}
           >
-            <img
-              src="/icons/fi-rr-apps-add.png"
-              alt="add"
-              className="w-5 h-5 opacity-60 hover:opacity-100"
-            />
+            <span className="material-symbols-outlined text-[18px]"
+              style={{ fontVariationSettings: "'FILL' 1" }}>
+              checklist
+            </span>
             {isLoading ? '처리 중...' : '할일 추출'}
           </button>
-        </div>
-
-        <div className="text-center mt-2 text-[11px] text-[#c4bfb4] font-medium">
-          자동 저장 중...
         </div>
       </div>
 

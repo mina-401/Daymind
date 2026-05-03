@@ -1,5 +1,6 @@
 export type EnergyLevel = 'low' | 'medium' | 'high'
 
+// 할 일 (Todo)
 export type Todo = {
   id: string
   title: string
@@ -14,6 +15,7 @@ export type Todo = {
   createdAt: string
 }
 
+// 메모 (Memo)
 export type Memo = {
   id: string
   title: string
@@ -23,6 +25,7 @@ export type Memo = {
   updatedAt: string
   createdAt: string
 }
+
 
 export type TimerSession = {
   id: string
@@ -44,19 +47,17 @@ export type HabitRecord = {
   date: string           
   isCompleted: boolean
 }
-// 스테이지 (미션 하나)
+
 export type Stage = {
   id: string
   title: string
   icon: string
-  targetDays: number     
-  rewardXP: number        
+  rewardXP: number
   order: number        
   parallelGroup?: string  
   createdAt: string
 }
 
-// 스테이지 진행 기록
 export type StageRecord = {
   id: string
   stageId: string
@@ -64,11 +65,11 @@ export type StageRecord = {
   isCompleted: boolean
 }
 
-// 루틴 (스테이지들의 묶음)
 export type Routine = {
   id: string
   title: string
+  targetDays: number      // ← 추가 (루틴 전체 목표일수)
   stages: Stage[]
-  totalXP: number         // 누적 경험치
+  totalXP: number
   createdAt: string
 }

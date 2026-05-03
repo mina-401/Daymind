@@ -6,31 +6,19 @@ type RoutineStore = {
   routines: Routine[]
   records: StageRecord[]
 
-  // 루틴 추가
-  addRoutine: (title: string) => string
-  // 루틴 삭제
+  addRoutine: (title: string, targetDays: number) => string
   deleteRoutine: (id: string) => void
+  updateRoutine: (id: string, updates: Partial<Routine>) => void
 
-  // 스테이지 추가
   addStage: (routineId: string, stage: Omit<Stage, 'id' | 'createdAt'>) => void
-  // 스테이지 수정
   updateStage: (routineId: string, stageId: string, updates: Partial<Stage>) => void
-  // 스테이지 삭제
   deleteStage: (routineId: string, stageId: string) => void
 
-  // 오늘 스테이지 체크/해제
   toggleStageRecord: (stageId: string, date: string) => void
-
-  // 특정 날짜 완료 여부
   isStageCompleted: (stageId: string, date: string) => boolean
-
-  // 스테이지 연속 달성일 (스트릭)
   getStageStreak: (stageId: string) => number
-
-  // 스테이지 해금 여부 (이전 order 스테이지 클리어 여부)
+  getStageCount: (stageId: string) => number
   isStageUnlocked: (routineId: string, stageId: string) => boolean
-
-  // 누적 XP
   getTotalXP: (routineId: string) => number
 }
 
@@ -40,11 +28,12 @@ export const useRoutineStore = create<RoutineStore>()(
       routines: [],
       records: [],
 
-      addRoutine: (title) => {
+      addRoutine: (title, targetDays) => {
         const id = crypto.randomUUID()
         const newRoutine: Routine = {
           id,
           title,
+          targetDays,
           stages: [],
           totalXP: 0,
           createdAt: new Date().toISOString(),
@@ -60,6 +49,14 @@ export const useRoutineStore = create<RoutineStore>()(
             const routine = state.routines.find((rt) => rt.id === id)
             return !routine?.stages.some((s) => s.id === r.stageId)
           }),
+        }))
+      },
+
+      updateRoutine: (id, updates) => {
+        set((state) => ({
+          routines: state.routines.map((r) =>
+            r.id === id ? { ...r, ...updates } : r
+          ),
         }))
       },
 
@@ -82,12 +79,7 @@ export const useRoutineStore = create<RoutineStore>()(
         set((state) => ({
           routines: state.routines.map((r) =>
             r.id === routineId
-              ? {
-                  ...r,
-                  stages: r.stages.map((s) =>
-                    s.id === stageId ? { ...s, ...updates } : s
-                  ),
-                }
+              ? { ...r, stages: r.stages.map((s) => s.id === stageId ? { ...s, ...updates } : s) }
               : r
           ),
         }))
@@ -106,9 +98,7 @@ export const useRoutineStore = create<RoutineStore>()(
 
       toggleStageRecord: (stageId, date) => {
         const { records } = get()
-        const existing = records.find(
-          (r) => r.stageId === stageId && r.date === date
-        )
+        const existing = records.find((r) => r.stageId === stageId && r.date === date)
         if (existing) {
           set((state) => ({
             records: state.records.map((r) =>
@@ -130,9 +120,7 @@ export const useRoutineStore = create<RoutineStore>()(
 
       isStageCompleted: (stageId, date) => {
         const { records } = get()
-        return records.some(
-          (r) => r.stageId === stageId && r.date === date && r.isCompleted
-        )
+        return records.some((r) => r.stageId === stageId && r.date === date && r.isCompleted)
       },
 
       getStageStreak: (stageId) => {
@@ -147,7 +135,6 @@ export const useRoutineStore = create<RoutineStore>()(
 
         let streak = 0
         const today = new Date()
-
         for (let i = 0; i < 365; i++) {
           const d = new Date(today)
           d.setDate(today.getDate() - i)
@@ -162,8 +149,14 @@ export const useRoutineStore = create<RoutineStore>()(
         return streak
       },
 
+      getStageCount: (stageId) => {
+        const { records } = get()
+        return records.filter((r) => r.stageId === stageId && r.isCompleted).length
+      },
+
       isStageUnlocked: (routineId, stageId) => {
-        const { routines, getStageStreak } = get()
+        const { routines, isStageCompleted } = get()
+        const today = new Date().toISOString().split('T')[0]
         const routine = routines.find((r) => r.id === routineId)
         if (!routine) return false
 
@@ -173,23 +166,19 @@ export const useRoutineStore = create<RoutineStore>()(
         // order 0 이면 항상 해금
         if (stage.order === 0) return true
 
-        // 이전 order 의 모든 스테이지가 목표 달성했는지 확인
-        const prevStages = routine.stages.filter(
-          (s) => s.order === stage.order - 1
-        )
-        return prevStages.every(
-          (s) => getStageStreak(s.id) >= s.targetDays
-        )
+        // 이전 order 스테이지들을 오늘 체크했으면 해금
+        const prevStages = routine.stages.filter((s) => s.order === stage.order - 1)
+        return prevStages.every((s) => isStageCompleted(s.id, today))
       },
 
       getTotalXP: (routineId) => {
-        const { routines, getStageStreak } = get()
+        const { routines, getStageCount } = get()
         const routine = routines.find((r) => r.id === routineId)
         if (!routine) return 0
 
         return routine.stages.reduce((total, stage) => {
-          const streak = getStageStreak(stage.id)
-          if (streak >= stage.targetDays) {
+          const count = getStageCount(stage.id)
+          if (count >= routine.targetDays) {
             return total + stage.rewardXP
           }
           return total
