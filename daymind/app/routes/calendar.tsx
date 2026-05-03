@@ -4,9 +4,18 @@ export default function Calendar() {
   return (
     <>
       {/* 헤더 */}
-      <header className="bg-[#a4a4c4] pt-4 pb-6 px-4 rounded-b-[24px]">
+      <header className="app-header px-5 py-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-white font-bold text-xl px-2">캘린더</h1>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center border-2"
+              style={{ backgroundColor: 'var(--color-primary-container)', borderColor: 'var(--color-primary-border)' }}>
+              <span className="material-symbols-outlined text-[20px]"
+                style={{ color: 'var(--color-primary)', fontVariationSettings: "'FILL' 1" }}>
+                calendar_month
+              </span>
+            </div>
+            <h1 className="font-bold text-xl" style={{ color: 'var(--color-primary)' }}>캘린더</h1>
+          </div>
         </div>
       </header>
 
