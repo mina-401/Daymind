@@ -50,6 +50,7 @@ export default function Memo() {
 
   const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
+  const [isLogListOpen, setIsLogListOpen] = useState(false)
   return (
     <>
       {/* 헤더 */}
@@ -131,12 +132,12 @@ export default function Memo() {
             {selectedDateLabel}
           </h2>
           <button
-            onClick={handleOpenMemo}
+            onClick={() => setIsLogListOpen(true)}
             className="bouncy-button flex items-center gap-1.5 px-4 py-2 rounded-2xl text-[13px] font-bold"
             style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}
           >
             <span className="material-symbols-outlined text-[16px]">edit_note</span>
-            {memos.some((m) => m.date === selectedDate) ? '로그 열기' : '로그 작성'}
+            로그 목록
           </button>
         </div>
           {/* 포스트잇 미리보기 */}
@@ -392,6 +393,128 @@ export default function Memo() {
         )}
 
       </main>
+      {/* 로그 목록 모달 */}
+      {isLogListOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+            onClick={() => setIsLogListOpen(false)}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+            <div className="w-full max-w-lg bg-white rounded-[32px] p-6 shadow-xl max-h-[80vh] overflow-y-auto">
+
+              {/* 핸들 */}
+              <div className="w-10 h-1 rounded-full mx-auto mb-4"
+                style={{ backgroundColor: 'var(--color-primary-container)' }} />
+
+              {/* 타이틀 */}
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-bold text-[18px]" style={{ color: 'var(--color-primary)' }}>
+                  로그 목록
+                </h2>
+                <button
+                  onClick={() => setIsLogListOpen(false)}
+                  className="w-8 h-8 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--color-surface-container)', color: 'var(--color-text-muted)' }}
+                >
+                  <span className="material-symbols-outlined text-[18px]">close</span>
+                </button>
+              </div>
+
+              {/* 날짜별 로그 목록 */}
+              <div className="space-y-3">
+                {(() => {
+                  // 할일, 습관, 세션, 메모 있는 날짜 수집
+                  const allDates = new Set<string>()
+                  todos.forEach((t) => allDates.add(t.date))
+                  sessions.forEach((s) => allDates.add(s.completedAt.split('T')[0]))
+                  memos.filter((m) => m.date).forEach((m) => allDates.add(m.date!))
+
+                  if (allDates.size === 0) {
+                    return (
+                      <div className="text-center py-10"
+                        style={{ color: 'var(--color-text-light)' }}>
+                        <span className="text-[40px] block mb-2">📅</span>
+                        <p className="font-bold text-[14px]">아직 기록이 없어요</p>
+                      </div>
+                    )
+                  }
+
+                  return [...allDates]
+                    .sort((a, b) => b.localeCompare(a))
+                    .map((date) => {
+                      const dayTodosAll = todos.filter((t) => t.date === date)
+                      const dayCompleted = dayTodosAll.filter((t) => t.isCompleted).length
+                      const daySessionsAll = sessions.filter((s) => s.completedAt.startsWith(date))
+                      const dayMinutes = Math.floor(daySessionsAll.reduce((acc, s) => acc + s.duration, 0) / 60)
+                      const dayHabitsAll = habits.filter((h) =>
+                        records.some((r) => r.habitId === h.id && r.date === date && r.isCompleted)
+                      )
+                      const hasMemo = memos.some((m) => m.date === date)
+                      const isToday = date === today
+
+                      const dateLabel = new Date(date + 'T00:00:00').toLocaleDateString('ko-KR', {
+                        month: 'long', day: 'numeric', weekday: 'long',
+                      })
+
+                      return (
+                        <button
+                          key={date}
+                          onClick={() => {
+                            const id = getOrCreateDailyMemo(date)
+                            navigate(`/memo/${id}`)
+                            setIsLogListOpen(false)
+                          }}
+                          className="bouncy-button w-full rounded-[24px] border p-4 text-left transition-all"
+                          style={{
+                            backgroundColor: isToday ? 'var(--color-primary-container)' : 'white',
+                            borderColor: isToday ? 'var(--color-primary-border)' : 'var(--color-primary-container)',
+                          }}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-grow">
+                              <div className="flex items-center gap-2 mb-2">
+                                {isToday && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                                    style={{ backgroundColor: 'var(--color-primary)' }}>
+                                    오늘
+                                  </span>
+                                )}
+                                <span className="font-bold text-[14px]"
+                                  style={{ color: 'var(--color-text)' }}>
+                                  {dateLabel}
+                                </span>
+                              </div>
+                   
+                            </div>
+                            <span className="material-symbols-outlined text-[20px] flex-shrink-0"
+                              style={{ color: 'var(--color-primary)' }}>
+                              chevron_right
+                            </span>
+                          </div>
+                        </button>
+                      )
+                    })
+                })()}
+              </div>
+
+              {/* 오늘 로그 작성 버튼 */}
+              <button
+                onClick={() => {
+                  handleOpenMemo()
+                  setIsLogListOpen(false)
+                }}
+                className="bouncy-button w-full mt-4 py-3.5 rounded-2xl font-bold text-white text-[13px] flex items-center justify-center gap-2"
+                style={{ backgroundColor: 'var(--color-primary)' }}
+              >
+                <span className="material-symbols-outlined text-[18px]">edit_note</span>
+                오늘 로그 작성
+              </button>
+
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

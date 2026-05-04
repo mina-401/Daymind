@@ -71,7 +71,7 @@ export default function TimerDisplay() {
 
         {/* 빠른 선택 */}
         <div className="flex gap-2 flex-wrap justify-center">
-          {[1,5, 25, 45, 60, 90, 120].map((min) => (
+          {[1, 25, 45, 60, 90, 120].map((min) => (
             <button
               key={min}
               onClick={() => useTimerStore.getState().setDuration(min)}

@@ -46,7 +46,7 @@ export default function Timer() {
       </header>
 
       {/* 메인 */}
-      <main className="px-4 mt-5 max-w-2xl mx-auto pb-32">
+      <main className="px-4 mt-5 max-w-2xl mx-auto pb-32 items-center">
 
         {/* 할일 선택 */}
         <TodoSelector />

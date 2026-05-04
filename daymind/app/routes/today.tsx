@@ -182,51 +182,42 @@ export default function Today() {
     {/* 메인 */}
     <main className="px-4 mt-5 space-y-4 max-w-2xl mx-auto">
 
-    {/* 이월 배너 */}
-    <RolloverBanner todos={todos} />
+      {/* 이월 배너 */}
+      <RolloverBanner todos={todos} />
 
-    {/* 탭 콘텐츠 */}
-    {activeTab === '일일' && (
-  <>
-    {/* 일일 퀘스트 */}
-    <div className="mb-2">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-[16px]">⚔️</span>
-        <span className="font-bold text-[15px] text-[#4a443a]">일일 퀘스트</span>
-      </div>
-      <TodoList todos={todayTodos} onEdit={handleEdit} />
-    </div>
+      {/* 탭 콘텐츠 */}
+      {activeTab === '일일' && (
+      <>
+        {/* 일일 퀘스트 */}
+        <div className="mb-2">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-[16px]">⚔️</span>
+            <span className="font-bold text-[15px] text-[#4a443a]">일일 퀘스트</span>
+          </div>
+          <TodoList todos={todayTodos} onEdit={handleEdit} />
+        </div>
+      </>
+      )}
 
+      {activeTab === '주간' && <WeeklyView />}
+      {activeTab === '습관' && (
+      <RoutineMap
+          onAddStage={(routineId, order) => {
+              setSelectedRoutineId(routineId)
+              setSelectedOrder(order)
+              setEditStage(null)
+              setIsStageEditorOpen(true)
+          }}
+          onEditStage={(routineId, stage) => {
+              setSelectedRoutineId(routineId)
+              setEditStage(stage)
+              setIsStageEditorOpen(true)
+          }}
+      />
+      )}
 
-    
-  </>
-    )}
-    {activeTab === '주간' && <WeeklyView />}
-    {activeTab === '습관' && (
-    <RoutineMap
-        onAddStage={(routineId, order) => {
-            setSelectedRoutineId(routineId)
-            setSelectedOrder(order)
-            setEditStage(null)
-            setIsStageEditorOpen(true)
-        }}
-        onEditStage={(routineId, stage) => {
-            setSelectedRoutineId(routineId)
-            setEditStage(stage)
-            setIsStageEditorOpen(true)
-        }}
-    />
-    )}
+    </main>
 
-      </main>
-
-      {/* 추가 버튼 */}
-      <DraggableButton
-        onClick={() => setIsModalOpen(true)}
-        storageKey="daymind-btn-today"
-      >
-        <span className="material-symbols-outlined text-white text-[28px]">add</span>
-      </DraggableButton>
 
       {/* 모달 */}
       <TodoModal
