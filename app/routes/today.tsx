@@ -243,6 +243,14 @@ export default function Today() {
         order={selectedOrder}
         editStage={editStage}
         />
+
+        {/* 추가 버튼 */}
+        <DraggableButton
+          onClick={() => setIsModalOpen(true)}
+          storageKey="daymind-btn-today"
+        >
+          <span className="material-symbols-outlined text-white text-[28px]">add</span>
+        </DraggableButton>
     </>
 
     

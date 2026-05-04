@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRoutineStore } from '../../store/routineStore'
 import type { Stage } from '../../types'
+import DraggableButton from '../ui/DraggableButton'
 
 type Props = {
   isOpen: boolean
@@ -50,6 +51,7 @@ export default function StageEditor({ isOpen, onClose, routineId, order, editSta
 
  return (
   <>
+
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={onClose} />
 
       <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
