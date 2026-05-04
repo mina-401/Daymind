@@ -4,9 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-  "build": "react-router build && copy build\\client\\index.html build\\client\\404.html",
-    "dev": "vite",
-    "preview": "vite preview",
+    "build": "react-router build",
+    "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "deploy": "gh-pages -d build/client"
