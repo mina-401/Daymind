@@ -385,7 +385,7 @@ export default function Memo() {
         {dayTodos.length === 0 && habits.length === 0 && daySessions.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16"
             style={{ color: 'var(--color-text-light)' }}>
-            <span className="text-[48px] mb-3">📅</span>
+
             <p className="font-bold text-[15px]">이 날의 기록이 없어요</p>
             <p className="text-[13px] mt-1">할일을 추가하거나 로그를 작성해보세요!</p>
           </div>

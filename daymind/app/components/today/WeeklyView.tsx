@@ -73,6 +73,16 @@ export default function WeeklyView() {
         })}
       </div>
 
+      {/* 할일 없을 때 */}
+      {selectedTodos.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-12 text-[#a4a4c4]">
+          <span className="material-symbols-outlined text-[48px] mb-3"
+            style={{ fontVariationSettings: "'FILL' 1" }}>
+            calendar_today
+          </span>
+          <p className="font-bold text-[15px]">이 날은 할 일이 없어요</p>
+        </div>
+      )}
       {/* 시간 미정 영역 */}
       {untimedTodos.length > 0 && (
         <div className="bg-white rounded-2xl p-4 border border-[#eee] mb-4">
@@ -147,16 +157,7 @@ export default function WeeklyView() {
         })}
       </div>
 
-      {/* 할일 없을 때 */}
-      {selectedTodos.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12 text-[#a4a4c4]">
-          <span className="material-symbols-outlined text-[48px] mb-3"
-            style={{ fontVariationSettings: "'FILL' 1" }}>
-            calendar_today
-          </span>
-          <p className="font-bold text-[15px]">이 날은 할 일이 없어요</p>
-        </div>
-      )}
+      
     </div>
   )
 }

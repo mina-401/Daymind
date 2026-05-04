@@ -2,6 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 @import "tailwindcss";
+@font-face {
+  font-family: 'Keungjeong';
+  src: url('/fonts/온글잎 긍정.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 /* ── 색상 변수 ── */
 :root {
   --color-primary: #674bb5;
@@ -22,12 +28,14 @@
 
   --color-error: #ba1a1a;
   --color-error-container: #ffdad6;
+
+
 }
 
 /* ── 기본 스타일 ── */
 body {
   min-height: 100dvh;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Keungjeong', 'Inter', sans-serif;
 
   color: var(--color-text);
   

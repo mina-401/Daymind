@@ -19,7 +19,7 @@ export default function TodoList({ todos, onEdit }: Props) {
           className="w-5 h-5 opacity-60 mb-5 hover:opacity-100"
         />
         <p className="font-bold text-[15px]">오늘 할 일이 없어요</p>
-        <p className="text-[13px] mb-20 mt-1">아래 버튼으로 추가해보세요!</p>
+        <p className="text-[13px] mb-20 mt-1"> + 버튼으로 추가해보세요!</p>
       </div>
     )
   }

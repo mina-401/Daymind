@@ -49,88 +49,117 @@ export default function TodoModal({ isOpen, onClose, editTodo, date }: Props) {
 
   if (!isOpen) return null
 
-  return (
-    <>
+ return (
+  <>
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={onClose} />
 
-      <div className="fixed bottom-0 left-0 w-full bg-white rounded-t-[32px] z-50 p-6 pb-10 shadow-xl">
-        <div className="w-10 h-1 bg-[#eee] rounded-full mx-auto mb-6" />
+      <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+        <div className="w-full max-w-lg bg-white rounded-[32px] p-6 pb-8 shadow-xl">
 
-        <h2 className="font-bold text-[18px] text-[#4a443a] mb-6">
-          {editTodo ? '할 일 수정' : '할 일 추가'}
-        </h2>
+          <div className="w-10 h-1 rounded-full mx-auto mb-6"
+            style={{ backgroundColor: 'var(--color-primary-container)' }} />
 
-        <div className="mb-5">
-          <label className="text-[12px] font-bold text-[#a4a4c4] uppercase tracking-wider mb-2 block">
-            할 일
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-            placeholder="무엇을 할까요?"
-            autoFocus
-            className="w-full bg-[#f7f4e9] border border-[#eee] rounded-2xl px-4 py-3 text-[15px] font-medium text-[#4a443a] placeholder-[#c4bfb4] outline-none focus:border-[#a4a4c4] transition-colors"
-          />
-        </div>
+          <h2 className="font-bold text-[18px] mb-6" style={{ color: 'var(--color-primary)' }}>
+            {editTodo ? '할 일 수정' : '할 일 추가'}
+          </h2>
 
-        <div className="mb-5">
-          <label className="text-[12px] font-bold text-[#a4a4c4] uppercase tracking-wider mb-2 block">
-            에너지 소모량
-          </label>
-          <div className="flex gap-2">
-            {energyOptions.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setEnergy(option.value)}
-                className={`bouncy-button flex-1 py-2.5 rounded-2xl border-2 text-[13px] font-bold transition-all ${
-                  energy === option.value
-                    ? option.color + ' border-opacity-100'
-                    : 'bg-white border-[#eee] text-[#a4a4c4]'
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <label className="text-[12px] font-bold text-[#a4a4c4] uppercase tracking-wider mb-2 block">
-            시간 설정 (선택)
-          </label>
-          <div className="flex items-center gap-3">
+          {/* 할일 입력 */}
+          <div className="mb-5">
+            <label className="text-[12px] font-bold uppercase tracking-wider mb-2 block"
+              style={{ color: 'var(--color-text-muted)' }}>
+              할 일
+            </label>
             <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="flex-1 bg-[#f7f4e9] border border-[#eee] rounded-2xl px-4 py-3 text-[15px] font-medium text-[#4a443a] outline-none focus:border-[#a4a4c4] transition-colors"
-            />
-            <span className="text-[#a4a4c4] font-bold">~</span>
-            <input
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="flex-1 bg-[#f7f4e9] border border-[#eee] rounded-2xl px-4 py-3 text-[15px] font-medium text-[#4a443a] outline-none focus:border-[#a4a4c4] transition-colors"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+              placeholder="무엇을 할까요?"
+              autoFocus
+              className="w-full rounded-2xl px-4 py-3 text-[15px] font-medium outline-none border-2"
+              style={{
+                backgroundColor: 'var(--color-surface-container)',
+                borderColor: 'var(--color-primary-container)',
+                color: 'var(--color-text)',
+              }}
             />
           </div>
-        </div>
 
-        <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="bouncy-button flex-1 py-3.5 rounded-2xl border-2 border-[#eee] font-bold text-[#a4a4c4]"
-          >
-            취소
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!title.trim()}
-            className="bouncy-button flex-1 py-3.5 rounded-2xl bg-[#a4a4c4] font-bold text-white disabled:opacity-40 transition-opacity"
-          >
-            {editTodo ? '수정' : '추가'}
-          </button>
+          {/* 에너지 선택 */}
+          <div className="mb-5">
+            <label className="text-[12px] font-bold uppercase tracking-wider mb-2 block"
+              style={{ color: 'var(--color-text-muted)' }}>
+              에너지 소모량
+            </label>
+            <div className="flex gap-2">
+              {energyOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => setEnergy(option.value)}
+                  className={`bouncy-button flex-1 py-2.5 rounded-2xl border-2 text-[13px] font-bold transition-all ${
+                    energy === option.value
+                      ? option.color
+                      : 'bg-white border-[#eee] text-[#a4a4c4]'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 시간 설정 */}
+          <div className="mb-8">
+            <label className="text-[12px] font-bold uppercase tracking-wider mb-2 block"
+              style={{ color: 'var(--color-text-muted)' }}>
+              시간 설정 (선택)
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="flex-1 rounded-2xl px-4 py-3 text-[15px] font-medium outline-none border-2"
+                style={{
+                  backgroundColor: 'var(--color-surface-container)',
+                  borderColor: 'var(--color-primary-container)',
+                  color: 'var(--color-text)',
+                }}
+              />
+              <span className="font-bold" style={{ color: 'var(--color-text-muted)' }}>~</span>
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="flex-1 rounded-2xl px-4 py-3 text-[15px] font-medium outline-none border-2"
+                style={{
+                  backgroundColor: 'var(--color-surface-container)',
+                  borderColor: 'var(--color-primary-container)',
+                  color: 'var(--color-text)',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* 버튼 */}
+          <div className="flex gap-3">
+            <button
+              onClick={onClose}
+              className="bouncy-button flex-1 py-3.5 rounded-2xl border-2 font-bold text-[13px]"
+              style={{ borderColor: 'var(--color-primary-container)', color: 'var(--color-text-muted)' }}
+            >
+              취소
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={!title.trim()}
+              className="bouncy-button flex-1 py-3.5 rounded-2xl font-bold text-white text-[13px] disabled:opacity-40"
+              style={{ backgroundColor: 'var(--color-primary)' }}
+            >
+              {editTodo ? '수정' : '추가'}
+            </button>
+          </div>
+
         </div>
       </div>
     </>

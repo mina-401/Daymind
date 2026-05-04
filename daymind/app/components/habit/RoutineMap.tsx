@@ -31,7 +31,7 @@ export default function RoutineMap({ onAddStage, onEditStage }: Props) {
     return (
       <div className="flex flex-col items-center justify-center py-16"
         style={{ color: 'var(--color-text-light)' }}>
-        <span className="text-[48px] mb-3">🗺️</span>
+        <span className="text-[48px] mb-3"></span>
         <p className="font-bold text-[15px]">나만의 루틴을 만들어보세요!</p>
         <p className="text-[13px] mt-1">새로운 루틴을 추가해보세요</p>
         <button
