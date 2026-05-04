@@ -51,11 +51,6 @@ export default function StageCard({ stage, routineId, isUnlocked, onEdit }: Prop
                 이전 습관 완료 후 해금
               </span>
             )}
-            {isUnlocked && (
-              <span className="text-[11px] font-bold" style={{ color: 'var(--color-primary)' }}>
-                {stage.rewardXP}XP
-              </span>
-            )}
           </div>
         </div>
 

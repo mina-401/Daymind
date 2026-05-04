@@ -22,12 +22,12 @@ export default function Today() {
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
 
-    const [isStageEditorOpen, setIsStageEditorOpen] = useState(false)
-    const [selectedRoutineId, setSelectedRoutineId] = useState('')
-    const [selectedOrder, setSelectedOrder] = useState(0)
-    const [editStage, setEditStage] = useState<Stage | null>(null)
+  const [isStageEditorOpen, setIsStageEditorOpen] = useState(false)
+  const [selectedRoutineId, setSelectedRoutineId] = useState('')
+  const [selectedOrder, setSelectedOrder] = useState(0)
+  const [editStage, setEditStage] = useState<Stage | null>(null)
   const [activeTab, setActiveTab] = useState<TabType>('일일')
-    const { routines, getTotalXP } = useRoutineStore()
+  const { routines, getTotalXP } = useRoutineStore()
 
   const today = new Date().toISOString().split('T')[0]
   const todayTodos = todos.filter((t) => t.date === today)

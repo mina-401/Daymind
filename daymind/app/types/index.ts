@@ -52,9 +52,18 @@ export type Stage = {
   id: string
   title: string
   icon: string
-  rewardXP: number
   order: number        
   parallelGroup?: string  
+  createdAt: string
+}
+
+export type Routine = {
+  id: string
+  title: string
+  targetDays: number
+  rewardXP: number      // ← 추가
+  stages: Stage[]
+  totalXP: number
   createdAt: string
 }
 
@@ -63,13 +72,4 @@ export type StageRecord = {
   stageId: string
   date: string            
   isCompleted: boolean
-}
-
-export type Routine = {
-  id: string
-  title: string
-  targetDays: number      // ← 추가 (루틴 전체 목표일수)
-  stages: Stage[]
-  totalXP: number
-  createdAt: string
 }

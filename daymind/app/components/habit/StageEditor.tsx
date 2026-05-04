@@ -22,26 +22,26 @@ export default function StageEditor({ isOpen, onClose, routineId, order, editSta
 
   const [title, setTitle] = useState('')
   const [icon, setIcon] = useState('🎯')
-  const [rewardXP, setRewardXP] = useState(50)
+
 
   useEffect(() => {
     if (editStage) {
       setTitle(editStage.title)
       setIcon(editStage.icon)
-      setRewardXP(editStage.rewardXP)
+
     } else {
       setTitle('')
       setIcon('🎯')
-      setRewardXP(50)
+      //setRewardXP(50)
     }
   }, [editStage, isOpen])
 
   const handleSubmit = () => {
     if (!title.trim()) return
     if (editStage) {
-      updateStage(routineId, editStage.id, { title, icon, rewardXP })
+      updateStage(routineId, editStage.id, { title, icon })
     } else {
-      addStage(routineId, { title, icon, rewardXP, order })
+      addStage(routineId, { title, icon, order })
     }
     onClose()
   }
@@ -104,30 +104,6 @@ export default function StageEditor({ isOpen, onClose, routineId, order, editSta
               color: 'var(--color-text)',
             }}
           />
-        </div>
-
-        {/* 보상 XP */}
-        <div className="mb-8">
-          <label className="text-[12px] font-bold uppercase tracking-wider mb-2 block"
-            style={{ color: 'var(--color-text-muted)' }}>
-            보상 XP
-          </label>
-          <div className="flex gap-2">
-            {[10, 25, 50, 100, 200].map((xp) => (
-              <button
-                key={xp}
-                onClick={() => setRewardXP(xp)}
-                className="bouncy-button flex-1 py-2.5 rounded-2xl text-[13px] font-bold border-2 transition-all"
-                style={{
-                  backgroundColor: rewardXP === xp ? 'var(--color-primary)' : 'white',
-                  color: rewardXP === xp ? 'white' : 'var(--color-primary)',
-                  borderColor: rewardXP === xp ? 'var(--color-primary)' : 'var(--color-primary-container)',
-                }}
-              >
-                ⚡{xp}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* 버튼 */}

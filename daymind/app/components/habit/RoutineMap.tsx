@@ -11,17 +11,19 @@ type Props = {
 export default function RoutineMap({ onAddStage, onEditStage }: Props) {
   const { routines, records, addRoutine, deleteRoutine, isStageUnlocked, getTotalXP } = useRoutineStore()
   const [newRoutineTitle, setNewRoutineTitle] = useState('')
-const [newRoutineTargetDays, setNewRoutineTargetDays] = useState('7')
-const [isAddingRoutine, setIsAddingRoutine] = useState(false)
-const [weekPage, setWeekPage] = useState<Record<string, number>>({}) 
+  const [newRoutineTargetDays, setNewRoutineTargetDays] = useState('7')
+  const [newRoutineRewardXP, setNewRoutineRewardXP] = useState(10)
+  const [isAddingRoutine, setIsAddingRoutine] = useState(false)
+  const [weekPage, setWeekPage] = useState<Record<string, number>>({})
 
   const handleAddRoutine = () => {
     if (!newRoutineTitle.trim()) return
     const days = parseInt(newRoutineTargetDays)
     if (!days || days < 1) return
-    addRoutine(newRoutineTitle, days)
+    addRoutine(newRoutineTitle, days, newRoutineRewardXP)
     setNewRoutineTitle('')
     setNewRoutineTargetDays('7')
+    setNewRoutineRewardXP(10)
     setIsAddingRoutine(false)
   }
 
@@ -178,7 +180,7 @@ const [weekPage, setWeekPage] = useState<Record<string, number>>({})
               <div>
                 <h2 className="font-bold text-white text-[15px]">{routine.title}</h2>
                 <span className="text-[11px]" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                  목표 {routine.targetDays}일 · ⚡{totalXP}XP
+                  목표 {routine.targetDays}일 · 하루 완료 시 ⚡{routine.rewardXP}XP
                 </span>
               </div>
               <button
@@ -300,6 +302,7 @@ const [weekPage, setWeekPage] = useState<Record<string, number>>({})
             )}
           </div>
 
+
           <div className="flex gap-2 flex-wrap">
             {[1, 3, 7, 14, 21, 30].map((d) => (
               <button
@@ -315,6 +318,30 @@ const [weekPage, setWeekPage] = useState<Record<string, number>>({})
                 {d}일
               </button>
             ))}
+          </div>
+
+          {/* 습관당 보상 XP */}
+          <div>
+            <label className="text-[12px] font-bold uppercase tracking-wider mb-1.5 block"
+              style={{ color: 'var(--color-text-muted)' }}>
+              습관당 보상 XP
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              {[5, 10, 25, 50, 100].map((xp) => (
+                <button
+                  key={xp}
+                  onClick={() => setNewRoutineRewardXP(xp)}
+                  className="bouncy-button px-3 py-1.5 rounded-full text-[12px] font-bold border-2 transition-all"
+                  style={{
+                    backgroundColor: newRoutineRewardXP === xp ? 'var(--color-primary)' : 'white',
+                    color: newRoutineRewardXP === xp ? 'white' : 'var(--color-primary)',
+                    borderColor: newRoutineRewardXP === xp ? 'var(--color-primary)' : 'var(--color-primary-container)',
+                  }}
+                >
+                  ⚡{xp}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex gap-2 pt-1">

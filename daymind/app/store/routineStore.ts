@@ -6,7 +6,7 @@ type RoutineStore = {
   routines: Routine[]
   records: StageRecord[]
 
-  addRoutine: (title: string, targetDays: number) => string
+  addRoutine: (title: string, targetDays: number, rewardXP: number) => string
   deleteRoutine: (id: string) => void
   updateRoutine: (id: string, updates: Partial<Routine>) => void
 
@@ -28,12 +28,13 @@ export const useRoutineStore = create<RoutineStore>()(
       routines: [],
       records: [],
 
-      addRoutine: (title, targetDays) => {
+      addRoutine: (title, targetDays, rewardXP) => {
         const id = crypto.randomUUID()
         const newRoutine: Routine = {
           id,
           title,
           targetDays,
+          rewardXP,
           stages: [],
           totalXP: 0,
           createdAt: new Date().toISOString(),
@@ -172,17 +173,17 @@ export const useRoutineStore = create<RoutineStore>()(
       },
 
       getTotalXP: (routineId) => {
-        const { routines, getStageCount } = get()
+        const { routines, isStageCompleted } = get()
+        const today = new Date().toISOString().split('T')[0]
         const routine = routines.find((r) => r.id === routineId)
-        if (!routine) return 0
+        if (!routine || routine.stages.length === 0) return 0
 
-        return routine.stages.reduce((total, stage) => {
-          const count = getStageCount(stage.id)
-          if (count >= routine.targetDays) {
-            return total + stage.rewardXP
-          }
-          return total
-        }, 0)
+        // 오늘 모든 스테이지 완료했으면 rewardXP 지급
+        const allCompleted = routine.stages.every((stage) =>
+          isStageCompleted(stage.id, today)
+        )
+
+        return allCompleted ? routine.rewardXP : 0
       },
     }),
     {
