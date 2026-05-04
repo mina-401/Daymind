@@ -165,9 +165,9 @@ export default function MonthlyView() {
         </div>
 
         {/* 할일 목록 */}
-        {untimedTodos.length > 0 && (
+        {selectedTodos.length > 0 && (
           <div className="space-y-3">
-            {untimedTodos.map((todo) => (
+            {selectedTodos.map((todo) => (
               <TodoItem key={todo.id} todo={todo} onEdit={handleEdit} />
             ))}
           </div>

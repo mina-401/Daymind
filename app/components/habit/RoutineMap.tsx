@@ -320,11 +320,11 @@ export default function RoutineMap({ onAddStage, onEditStage }: Props) {
             ))}
           </div>
 
-          {/* 습관당 보상 XP */}
+          {/* 루틴 완료 보상 XP */}
           <div>
             <label className="text-[12px] font-bold uppercase tracking-wider mb-1.5 block"
               style={{ color: 'var(--color-text-muted)' }}>
-              습관당 보상 XP
+              루틴 완료 보상 XP
             </label>
             <div className="flex gap-2 flex-wrap">
               {[5, 10, 25, 50, 100].map((xp) => (
