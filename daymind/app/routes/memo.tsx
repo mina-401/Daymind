@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useMemoStore } from '../store/memoStore'
 import { useTodoStore } from '../store/todoStore'
 import { useTimerStore } from '../store/timerStore'
-import { useHabitStore } from '../store/habitStore'
+import { useRoutineStore } from '../store/routineStore'
 
 function getWeekDates() {
   const today = new Date()
@@ -22,7 +22,7 @@ export default function Memo() {
   const { memos, getOrCreateDailyMemo } = useMemoStore()
   const { todos } = useTodoStore()
   const { sessions } = useTimerStore()
-  const { habits, records } = useHabitStore()
+  const { routines, records, isStageCompleted } = useRoutineStore()
 
   const today = new Date().toISOString().split('T')[0]
   const [selectedDate, setSelectedDate] = useState(today)
@@ -33,11 +33,17 @@ export default function Memo() {
   const incompleteTodos = dayTodos.filter((t) => !t.isCompleted)
   const daySessions = sessions.filter((s) => s.completedAt.startsWith(selectedDate))
   const totalMinutes = Math.floor(daySessions.reduce((acc, s) => acc + s.duration, 0) / 60)
-  const dayHabits = habits.map((h) => ({
-    ...h,
-    isCompleted: records.some((r) => r.habitId === h.id && r.date === selectedDate && r.isCompleted),
-  }))
-  const completedHabits = dayHabits.filter((h) => h.isCompleted)
+  // 모든 루틴의 스테이지를 습관으로 표시
+  const dayHabits = routines.flatMap((r) =>
+    r.stages.map((s) => ({
+      id: s.id,
+      title: s.title,
+      icon: s.icon,
+      routineTitle: r.title,
+      isCompleted: isStageCompleted(s.id, selectedDate),
+    }))
+  )
+const completedHabits = dayHabits.filter((h) => h.isCompleted)
 
   const selectedDateLabel = new Date(selectedDate + 'T00:00:00').toLocaleDateString('ko-KR', {
     month: 'long', day: 'numeric', weekday: 'long',
@@ -51,6 +57,9 @@ export default function Memo() {
   const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
   const [isLogListOpen, setIsLogListOpen] = useState(false)
+
+
+
   return (
     <>
       {/* 헤더 */}
@@ -224,7 +233,7 @@ export default function Memo() {
           <div className="grid grid-cols-3 gap-3">
             {[
               { value: completedTodos.length, label: '할일 완료', sub: `/ ${dayTodos.length}개`, icon: 'check_circle' },
-              { value: completedHabits.length, label: '습관 달성', sub: `/ ${habits.length}개`, icon: 'local_fire_department' },
+              { value: completedHabits.length, label: '습관 달성', sub: `/ ${dayHabits.length}개`, icon: 'local_fire_department' },
               { value: totalMinutes, label: '집중 시간', sub: '분', icon: 'timer' },
             ].map((item) => (
               <div key={item.label} className="flex flex-col items-center rounded-2xl p-3"
@@ -310,7 +319,7 @@ export default function Memo() {
         )}
 
         {/* 습관 달성 */}
-        {habits.length > 0 && (
+        {dayHabits.length > 0 && (
           <div className="rounded-[28px] border p-5"
             style={{ backgroundColor: 'white', borderColor: 'var(--color-primary-container)' }}>
             <div className="flex items-center gap-1.5 mb-3">
@@ -325,10 +334,16 @@ export default function Memo() {
                 <div key={habit.id} className="flex items-center justify-between py-1">
                   <div className="flex items-center gap-2">
                     <span className="text-[16px]">{habit.icon}</span>
-                    <span className="text-[14px] font-medium"
-                      style={{ color: habit.isCompleted ? 'var(--color-text)' : 'var(--color-text-light)' }}>
-                      {habit.title}
-                    </span>
+                    <div>
+                      <span className="text-[14px] font-medium"
+                        style={{ color: habit.isCompleted ? 'var(--color-text)' : 'var(--color-text-light)' }}>
+                        {habit.title}
+                      </span>
+                      <span className="text-[11px] block"
+                        style={{ color: 'var(--color-text-light)' }}>
+                        {habit.routineTitle}
+                      </span>
+                    </div>
                   </div>
                   <span className="text-[12px] font-bold px-2 py-0.5 rounded-full"
                     style={{
@@ -383,7 +398,7 @@ export default function Memo() {
         )}
 
         {/* 아무것도 없을 때 */}
-        {dayTodos.length === 0 && habits.length === 0 && daySessions.length === 0 && (
+        {dayTodos.length === 0 && dayHabits.length === 0 && daySessions.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16"
             style={{ color: 'var(--color-text-light)' }}>
 
@@ -447,8 +462,8 @@ export default function Memo() {
                       const dayCompleted = dayTodosAll.filter((t) => t.isCompleted).length
                       const daySessionsAll = sessions.filter((s) => s.completedAt.startsWith(date))
                       const dayMinutes = Math.floor(daySessionsAll.reduce((acc, s) => acc + s.duration, 0) / 60)
-                      const dayHabitsAll = habits.filter((h) =>
-                        records.some((r) => r.habitId === h.id && r.date === date && r.isCompleted)
+                      const dayHabitsAll = routines.flatMap((r) =>
+                        r.stages.filter((s) => isStageCompleted(s.id, date))
                       )
                       const hasMemo = memos.some((m) => m.date === date)
                       const isToday = date === today

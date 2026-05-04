@@ -115,7 +115,7 @@ export default function RoutineMap({ onAddStage, onEditStage }: Props) {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-center">
+                  <table className="text-center ">
                     <thead>
                       <tr>
                         <td style={{ minWidth: '40px' }} />
