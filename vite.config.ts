@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-base: '/Daymind/',  
+  base: '/Daymind/',  
   plugins: [
     tailwindcss(),
     reactRouter(),
@@ -19,7 +19,8 @@ base: '/Daymind/',
         background_color: '#f7f4e9',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: './',
+        scope: './',
         icons: [
           {
             src: '/icons/fi-rs-heart.png',
