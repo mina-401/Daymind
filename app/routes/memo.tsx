@@ -64,7 +64,7 @@ const completedHabits = dayHabits.filter((h) => h.isCompleted)
     <>
       {/* 헤더 */}
       <header className="app-header px-5 py-4">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center border-2"
               style={{ backgroundColor: 'var(--color-primary-container)', borderColor: 'var(--color-primary-border)' }}>
@@ -87,49 +87,7 @@ const completedHabits = dayHabits.filter((h) => h.isCompleted)
           </div>
         </div>
 
-        {/* 주간 날짜 바 */}
-        <div className="flex justify-between px-1">
-          {weekDates.map((date, i) => {
-            const isToday = date === today
-            const isSelected = date === selectedDate
-            const hasMemo = memos.some((m) => m.date === date)
-            const dayTodosCount = todos.filter((t) => t.date === date && t.isCompleted).length
-
-            return (
-              <button
-                key={date}
-                onClick={() => setSelectedDate(date)}
-                className="flex flex-col items-center gap-1"
-              >
-                <span className="text-[11px] font-bold"
-                  style={{
-                    color: i === 5 ? 'var(--color-primary)' :
-                           i === 6 ? '#ba1a1a' :
-                           'var(--color-text-muted)'
-                  }}>
-                  {DAYS[i]}
-                </span>
-                <div className="w-9 h-9 rounded-2xl flex items-center justify-center text-[14px] font-bold transition-all"
-                  style={{
-                    backgroundColor: isSelected ? 'var(--color-primary)' :
-                                     isToday ? 'var(--color-primary-container)' :
-                                     'transparent',
-                    color: isSelected ? 'white' :
-                           isToday ? 'var(--color-primary)' :
-                           'var(--color-text)',
-                  }}>
-                  {new Date(date + 'T00:00:00').getDate()}
-                </div>
-                <div className="w-1.5 h-1.5 rounded-full"
-                  style={{
-                    backgroundColor: hasMemo ? '#dcc66e' :
-                                     dayTodosCount > 0 ? 'var(--color-primary-light)' :
-                                     'transparent'
-                  }} />
-              </button>
-            )
-          })}
-        </div>
+        
       </header>
 
       {/* 메인 */}
