@@ -17,6 +17,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" >
       <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              var redirect = sessionStorage.getItem('redirect');
+              if (redirect) {
+                sessionStorage.removeItem('redirect');
+                window.history.replaceState(null, null, redirect);
+              }
+            })();
+          `
+        }} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
