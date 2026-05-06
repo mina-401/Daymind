@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import HabitList from '../components/habit/HabitList'
-import HabitModal from '../components/habit/HabitModal'
+
 import { useTodoStore } from '../store/todoStore'
 import { useRoutineStore } from '../store/routineStore'
 import TodoList from '../components/todo/TodoList'
@@ -20,7 +19,6 @@ export default function Today() {
   const { todos, rolloverTodos } = useTodoStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
-  const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
 
   const [isStageEditorOpen, setIsStageEditorOpen] = useState(false)
   const [selectedRoutineId, setSelectedRoutineId] = useState('')
@@ -227,11 +225,7 @@ export default function Today() {
         date={today}
       />
 
-      {/* 습관 모달 추가 */}
-      <HabitModal
-        isOpen={isHabitModalOpen}
-        onClose={() => setIsHabitModalOpen(false)}
-      />
+
 
       <StageEditor
         isOpen={isStageEditorOpen}
