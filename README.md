@@ -1,43 +1,71 @@
 # Daymind
 
+### 레이어 구조
+
+![layer_src](/images/layer.png)
+
 ### 파일구조
 ```
-app/
-├─ components/   # UI 및 기능 단위 컴포넌트
-├─ routes/       # 페이지 라우팅
-├─ store/        # 상태 관리 (전역 상태)
-├─ types/        # 타입 정의
-├─ utils/        # 공통 유틸 함수
-└─ root.tsx      # 앱 진입점
-
-components/
-├─ calendar/   # 캘린더 관련 UI
-├─ layout/     # 공통 레이아웃 (네비, 헤더)
-├─ memo/       # 메모 기능
-├─ timer/      # 타이머 기능
-├─ today/      # 오늘(메인) 화면 구성 요소
-├─ todo/       # 할 일 관리
-└─ ui/         # 재사용 가능한 공통 UI (버튼, 모달 등)
-
-routes/
-├─ _layout.tsx      # 공통 레이아웃 (하단 네비게이션)
-├─ today.tsx        # 메인 화면
-├─ calendar.tsx     # 캘린더
-├─ timer.tsx        # 타이머
-├─ memo.tsx         # 메모
-└─ settings.tsx     # 설정
-
-store/         # 공통 데이터 관리
-├─ todoStore.ts
-├─ timerStore.ts
-└─ memoStore.ts
-
-types/
-└─ index.ts        # 공통 타입 정의
-
-utils/
-├─ dateUtils.ts    # 날짜 관련 처리
-├─ rollover.ts     # 하루 초기화 로직
-└─ storage.ts      # 로컬 저장소 처리
+daymind/
+├── app/
+│   ├── routes/                 # 페이지
+│   │   ├── _layout.tsx         # 하단 네비게이션
+│   │   ├── today.tsx           # 오늘 (할일/주간/습관)
+│   │   ├── calendar.tsx        # 캘린더
+│   │   ├── timer.tsx           # 타이머
+│   │   ├── memo.tsx            # 데일리 로그
+│   │   └── memo.$id.tsx        # 메모 편집
+│   │
+│   ├── components/             # 공통 컴포넌트
+│   │   ├── ui/
+│   │   │   ├── EnergyTag.tsx   # 에너지 태그
+│   │   │   └── DraggableButton.tsx
+│   │   │
+│   │   ├── todo/
+│   │   │   ├── TodoItem.tsx    # 할일 카드
+│   │   │   ├── TodoList.tsx    # 할일 목록
+│   │   │   └── TodoModal.tsx   # 추가/수정 모달
+│   │   │
+│   │   ├── calendar/
+│   │   │   ├── MonthlyView.tsx # 월간 달력
+│   │   │   └── DayView.tsx
+│   │   │
+│   │   ├── timer/
+│   │   │   ├── TimerDisplay.tsx
+│   │   │   ├── TimerControls.tsx
+│   │   │   └── TodoSelector.tsx
+│   │   │
+│   │   ├── habit/
+│   │   │   ├── RoutineMap.tsx  # 루틴 맵
+│   │   │   ├── StageCard.tsx   # 스테이지 카드
+│   │   │   └── StageEditor.tsx # 스테이지 편집
+│   │   │
+│   │   ├── memo/
+│   │   │   └── MemoCard.tsx
+│   │   │
+│   │   └── today/
+│   │       ├── RolloverBanner.tsx  # 이월 배너
+│   │       └── WeeklyView.tsx      # 주간 뷰
+│   │
+│   ├── store/                  # 전역 상태관리
+│   │   ├── todoStore.ts
+│   │   ├── timerStore.ts
+│   │   ├── memoStore.ts
+│   │   └── routineStore.ts
+│   │
+│   ├── types/
+│   │   └── index.ts            # 타입 정의
+│   │
+│   ├── root.tsx                # HTML 틀
+│   ├── routes.ts               # URL 매핑
+│   └── app.css                 # 전역 스타일
+│
+├── public/
+│   ├── fonts/                  # 온글잎 긍정 폰트
+│   └── icons/                  # 아이콘
+│
+├── vite.config.ts              # 빌드 설정
+├── react-router.config.ts      # 라우터 설정
+└── package.json
 
 ```
