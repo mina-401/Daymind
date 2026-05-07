@@ -1,4 +1,7 @@
 # Daymind
+ [![Vercel](https://img.shields.io/badge/배포링크-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://daymind-theta.vercel.app/)
+> DayMind는 할일 관리, 루틴 트래킹, 집중 타이머, 데일리 로그를 하나의 앱으로 통합한 플래너입니다. <br>
+> 일상의 활동을 퀘스트 형식으로 관리하며 꾸준한 습관 형성을 돕습니다.
 
 ## 주요 기능
 ### ⚔️ 일일 퀘스트
