@@ -53,8 +53,6 @@
 | 상태관리 | Zustand + persist |
 | 스타일 | Tailwind CSS v4 |
 | 빌드 | Vite |
-| PWA | vite-plugin-pwa |
-| AI | Claude API (claude-sonnet-4) |
 | 배포 | Vercel |
 | 폰트 | 온글잎 긍정 |
 
