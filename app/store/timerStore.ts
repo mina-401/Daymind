@@ -60,6 +60,7 @@ export const useTimerStore = create<TimerStore>()(
         if (secondsLeft <= 1) {
           finish()
         } else {
+          //set호출 시점의 진짜 최신 값으로 secondsLeft를 감소시킴
           set((state) => ({ secondsLeft: state.secondsLeft - 1 }))
         }
       },

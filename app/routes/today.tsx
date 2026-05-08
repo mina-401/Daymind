@@ -61,7 +61,7 @@ export default function Today() {
             style={{ backgroundColor: 'var(--color-primary-container)', borderColor: 'var(--color-primary-border)' }}>
             <span className="material-symbols-outlined text-[20px]"
               style={{ color: 'var(--color-primary)', fontVariationSettings: "'FILL' 1" }}>
-              person
+              Checklist
             </span>
           </div>
           <h1 className="font-bold text-xl" style={{ color: 'var(--color-primary)' }}>퀘스트</h1>

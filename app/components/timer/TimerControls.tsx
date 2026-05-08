@@ -6,8 +6,8 @@ export default function TimerControls() {
 
   useEffect(() => {
     if (status !== 'running') return
-    const interval = setInterval(() => tick(), 1000)
-    return () => clearInterval(interval)
+    const interval = setInterval(() => tick(), 1000) // tick 액션이 1초마다 호출되어 secondsLeft가 감소
+    return () => clearInterval(interval) //status가 바뀔 때마다 타이머 정리
   }, [status])
 
   return (
