@@ -3,6 +3,7 @@ import { Outlet, NavLink } from "react-router";
 export default function Layout() {
   return (
     <div className="bg-dots min-h-screen pb-32">
+  
       <Outlet />
 
       <nav className="bottom-nav fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 pb-8">

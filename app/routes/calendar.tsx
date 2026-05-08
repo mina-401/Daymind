@@ -5,7 +5,7 @@ export default function Calendar() {
     <>
       {/* 헤더 */}
       <header className="app-header px-5 py-4">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center max-w-2xl mx-auto">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center border-2"
               style={{ backgroundColor: 'var(--color-primary-container)', borderColor: 'var(--color-primary-border)' }}>
@@ -14,7 +14,10 @@ export default function Calendar() {
                 calendar_month
               </span>
             </div>
-            <h1 className="font-bold text-xl" style={{ color: 'var(--color-primary)' }}>캘린더</h1>
+            <h1 className="font-bold text-[17px]">
+              <span style={{ color: 'var(--color-text-light)' }}>Daymind</span>
+              <span style={{ color: 'var(--color-primary)' }}> 캘린더</span>
+            </h1>
           </div>
         </div>
       </header>

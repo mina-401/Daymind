@@ -64,7 +64,7 @@ const completedHabits = dayHabits.filter((h) => h.isCompleted)
     <>
       {/* 헤더 */}
       <header className="app-header px-5 py-4">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center max-w-2xl mx-auto">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center border-2"
               style={{ backgroundColor: 'var(--color-primary-container)', borderColor: 'var(--color-primary-border)' }}>
@@ -73,7 +73,10 @@ const completedHabits = dayHabits.filter((h) => h.isCompleted)
                 auto_awesome
               </span>
             </div>
-            <h1 className="font-bold text-xl" style={{ color: 'var(--color-primary)' }}>데일리 로그</h1>
+            <h1 className="font-bold text-[17px]">
+              <span style={{ color: 'var(--color-text-light)' }}>Daymind</span>
+              <span style={{ color: 'var(--color-primary)' }}> 데일리 로그</span>
+            </h1>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border-2"
             style={{ backgroundColor: 'var(--color-surface-container)', borderColor: 'var(--color-primary-container)' }}>
